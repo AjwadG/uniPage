@@ -39,6 +39,7 @@ async function main(){
         resdient : String,
         selfie : String
     })
+    
     const WorkShop = new mongoose.model("WorkShop" , workShopScema);
     const User = new mongoose.model("User" , userScema);
     const Student = new mongoose.model("Student" , studentScema);
@@ -47,7 +48,65 @@ async function main(){
         res.render("home", {})
     });
 
-    app.post("/", function(req, res){
+    app.get("/about", function(req, res){
+        res.render("about", {})
+    });
+
+    app.get("/architecture", function(req, res){
+        res.render("departments/architecture-department", {})
+    });
+
+    app.get("/civil", function(req, res){
+        res.render("departments/civil-department", {})
+    });
+
+    app.get("/communication", function(req, res){
+        res.render("departments/communication-department", {})
+    });
+
+    app.get("/computer", function(req, res){
+        res.render("departments/computer-department", {})
+    });
+
+    app.get("/general", function(req, res){
+        res.render("departments/general-department", {})
+    });
+
+    app.get("/oil", function(req, res){
+        res.render("departments/oil-department", {})
+    });
+
+    app.get("/dean", function(req, res){
+        res.render("dean-of-college", {})
+    });
+
+
+    app.get("/about", function(req, res){
+        res.render("about", {})
+    });
+
+    app.get("/workShop", async function(req, res){
+        let workShops = await WorkShop.find({})
+        res.render("workShop", {workShops: workShops,})
+    });
+
+   
+
+    app.get("/signUp", function(req, res){
+        res.render("forms/signup", {});
+    })
+    app.get("/login", function(req, res){
+        res.render("forms/login", {});
+    })
+    app.get("/addUser", function(req, res){
+        res.render("forms/addUser", {});
+    })
+
+
+    app.get("/workShops", function(req, res){
+        res.render("forms/workShops", {});
+    })
+    app.post("/workShops", function(req, res){
         const workshop = new WorkShop({
             image : req.body.image,
             title : req.body.title,
@@ -60,28 +119,12 @@ async function main(){
         res.redirect("/workShop")
     });
 
-    app.get("/signUp", function(req, res){
-    res.sendFile(__dirname + "/signup.html");
-    })
-    app.get("/login", function(req, res){
-        res.sendFile(__dirname + "/signup.html");
-    })
-    app.get("/addUser", function(req, res){
-        res.sendFile(__dirname + "/signup.html");
-    })
-    app.get("/workShops", function(req, res){
-        res.sendFile(__dirname + "/signup.html");
-    })
-
-    app.get("/about", function(req, res){
-        res.render("about", {})
-    });
 
 
-    app.get("/workShop", async function(req, res){
-        let workShops = await WorkShop.find({})
-        res.render("workShop", {workShops: workShops,})
-    });
+
+
+
+
 
 
     app.listen(process.env.PORT || 3000 , function(){

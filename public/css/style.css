@@ -1059,3 +1059,7 @@ p{
     word-spacing: 0.01em;
     line-height: 22px;
 }
+a[onclick="return false;"]{
+    color: #b7202e !important;
+    font-size: larger;
+}

@@ -7,17 +7,18 @@
 
     <link href="css/sign.css" rel="stylesheet">
   </head>
-  <body class="text-center">
+  <body>
 
 
     
-<main class="form-signin mt-5 pb-0 w-100 mx-auto">
-  <form method="post" action="/">
-    <h1 class="h3 mb-3 fw-normal">add a workShop</h1>
+<main class="form-signin mt-3 pb-0 w-100 mx-auto">
+  <img src="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png" width="120px" alt="asd">
+  <form method="post" action="/workshops">
+    <h1 class="h3 mb-3 mt-3 fw-normal">add a workShop</h1>
 
     <div class="form-floating">
-      <input type="text" name="image" class="form-control top"  placeholder="image url" required autofocus>
-      <label>Image url</label>
+      <input type="file" name="image" class="form-control top"  placeholder="image" required autofocus>
+      <label>Image</label>
     </div>
     <div class="form-floating ">
       <input type="text" name="title" class="form-control mid"  placeholder="Title" required>
@@ -40,7 +41,7 @@
       <label>Place</label>
     </div>
 
-    <button class="w-100 btn mt-3 btn-lg btn-primary" type="submit">submit WorkShop</button>
+    <button class="w-100 btn mt-3 btn-lg btn-danger" type="submit">submit WorkShop</button>
     <p class="mt-4 mb-1 text-body-secondary">© CETZ</p>
   </form>
 </main>
