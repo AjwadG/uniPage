@@ -22,8 +22,26 @@ async function main(){
         duration : String,
         place: String
     })
-
+    const userScema = new mongoose.Schema({
+        name : String,
+        userName : String,
+        password : String,
+        level : Number
+    })
+    const studentScema = new mongoose.Schema({
+        name : String,
+        idNo : String,
+        phoneNo : Number,
+        cert : String,
+        Behavior : String,
+        health : String,
+        birth : String,
+        resdient : String,
+        selfie : String
+    })
     const WorkShop = new mongoose.model("WorkShop" , workShopScema);
+    const User = new mongoose.model("User" , userScema);
+    const Student = new mongoose.model("Student" , studentScema);
 
     app.get("/", function(req, res){
         res.render("home", {})
@@ -42,15 +60,24 @@ async function main(){
         res.redirect("/workShop")
     });
 
-    app.get("/input", function(req, res){
+    app.get("/signUp", function(req, res){
     res.sendFile(__dirname + "/signup.html");
+    })
+    app.get("/login", function(req, res){
+        res.sendFile(__dirname + "/signup.html");
+    })
+    app.get("/addUser", function(req, res){
+        res.sendFile(__dirname + "/signup.html");
+    })
+    app.get("/workShops", function(req, res){
+        res.sendFile(__dirname + "/signup.html");
     })
 
     app.get("/about", function(req, res){
         res.render("about", {})
     });
 
-    
+
     app.get("/workShop", async function(req, res){
         let workShops = await WorkShop.find({})
         res.render("workShop", {workShops: workShops,})

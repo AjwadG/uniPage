@@ -1,195 +1,404 @@
-<%- include("partials/header"); -%>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
-
-
-
-<div class="firstHero">
-    <div class="heroContainer">
-      <h1>
-        <div style="text-align: start;">hi</div>
-        <div style="text-align: start;">uniPage</div>
-      </h1>
-      <div class="heroStyle"></div>
-      <p>
-        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, tempore, .</div>
-        <div>nihil pariatur, et dicta aliquid doloribus rerum similique dolores </div>
-      </p>
-
-        <a class="linkbuton" href="">Explore programs</a>
-
-    </div>
-  </div>
-
-  <div class="px-4 py-5 my-5 text-center" name="second hero">
-    <h1 class="display-5 fw-bold text-body-emphasis">Centered hero</h1>
-    <div class="heroStyle center"></div>
-    <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4 mt-5">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <a class="linkbuton" href="">Explore programs</a>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="container col-xxl-8 px-4 py-5" name="third hero">
-    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-      <div class="col-10 col-sm-8 col-lg-4">
-        <p class="lead mb-5"> most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-        <a class="linkbuton" href="">Explore programs</a>
-
-      </div>
-      <div class="col-lg-8">
-
-        <p class="lead">Quickly design and customize responsive mobile-</p>
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive</h1>
-        <p class="lead">Quickly design and customize responsive mobile-</p>
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive</h1>
-        <p class="lead">Quickly design and customize responsive mobile-</p>
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive</h1>
-      </div>
-    </div>
-  </div>
-
-  <div class="numbers py-5">
-      <div class="numbersTitle mt-5">
-        <span>QUICK FACTS</span>
-      </div>
-
-      <div class="numbersCards mb-5">
-        <div class="numberCard">
-            <div class="numberImageCon">
-                <div class="numberImage" ></div>
-            </div>
-            <div class="numberPer" >94%</div>
-            <div class="numberTex">
-              <div class="line" > Lorem ipsum dolor sit amet  </div>
-              <div class="line" >Lorem ipsum dolor sit amet  </div>
-            </div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css\style.css">
+    
+</head>
+<body >
+    <header>
+      <div id="header">
+          <div style="display: flex; align-items: center;">
+          <img src="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png" class="logo">
+          <p class="college-name">كلية التقنية الهندسية زوارة</p>
+ 
         </div>
 
-        <div class="numbersCards">
-          <div class="numberCard">
-              <div class="numberImageCon">
-                  <div class="numberImage" ></div>
-              </div>
-              <div class="numberPer" >94%</div>
-              <div class="numberTex">
-                <div class="line" > Lorem ipsum dolor sit amet  </div>
-                <div class="line" >Lorem ipsum dolor sit amet  </div>
-              </div>
-            </div>
+        <div class="navItems" dir="rtl">
+          <nav class="navStyle"></nav>
+          <ul>
+            <li><a href="index.html">الرئيسية </a>
+            <li><a href="about.html">عن الكلية</a>
+              <ul>
+                <div class="sub-menu-office">
+                  <ul class="block" style="width:200px;"> 
+                  <li><a href="about.html"> الرؤية والرسالة والأهداف </a></li>
+                  <li><a href="dean-of-college.html"> كلمة عميد الكلية</a></li>
+                  <!-- <li><a href="">مكتب الشئون القانونية</a></li>
+                  <li><a href="">مكتب التوثيق والمعلومات</a></li>
+                  <li><a href="">  مكتب المراجعة الداخلية</a></li>
+                  <li><a href=""> مكتب ضمان الجودة</a> </li>
+                  <li><a href="">  مكتب الموارد الذاتية</a></li>
+                  <li><a href="">  مكتب الشئون الادارية والمالية</a></li>
+                  <li><a href="">  مكتب شؤون أعضاء هيئة التدريس</a></li> -->
+                </ul>
+            </div></ul>
+            </li>
+                <li style="position: relative;"><a href="">المكاتب والإدارات</a>
+                <ul>
+                    <div class="sub-menu-office">
+                      <ul class="block" style="width:220px;"> 
+                      <li><a href="">مكتب المسجل العام</a></li>
+                      <li><a href="">مكتب شؤون العميد</a></li>
+                      <li><a href="">مكتب الشئون القانونية</a></li>
+                      <li><a href="">مكتب التوثيق والمعلومات</a></li>
+                      <li><a href="">  مكتب المراجعة الداخلية</a></li>
+                      <li><a href=""> مكتب ضمان الجودة</a> </li>
+                      <li><a href="">  مكتب الموارد الذاتية</a></li>
+                      <li><a href="">  مكتب الشئون الادارية والمالية</a></li>
+                      <li><a href="">  مكتب شؤون أعضاء هيئة التدريس</a></li>
+                    </ul>
+                </div></ul></li>
+                
+                <li><a href="">الأقسام</a>
+                  <ul>
+                    <div class="sub-menu-office" dir="rtl">
+                      <ul class="block" style="width:250px;"> 
+                      <li><a href="general-department.html">القسم العام</a></li>
+                      <li><a href="computer-department.html">قسم هندسة الحاسوب</a></li>
+                      <li><a href="communication-department.html">قسم الهندسة الكهربائية والإلكترونية </a></li>
+                      <li><a href="oil-department.html">  قسم الهندسة النفطية</a></li>
+                      <li><a href="civil-department.html"> قسم الهندسة المدنية  </a> </li>
+                      <li><a href="architecture-department .html"> قسم الهندسة المعمارية </a></li>
+                     </ul>
+                   </div>
+                 </ul>
+                </li>
+                <button class="sign-btn" id="sign-btn">تسجيل في الكلية</button>
+                <div class="model" >
+                  <div class="model-header">
+                     <div class="model-title"> التسجيل </div>
+                     <button class="close-btn" id="close-btn">&times;</button>
+                  </div>
+                  <div class="model-body">
+                   <p>الوثائق المطلوبة لتسجيل في السمستر الأول في الكلية</p>
+                   <ul>
+                    <li>استمارة الشهادة الثانوية</li>
+                    <li>حسن سيرة وسلوك</li>
+                    <li>شهادة صحية</li>
+                    <li>الرقم الوطني</li>
+                    <img src="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png" alt="">
+                    <li>شهادة ميلاد</li>
+                    <li>شهادة إقامه</li>
+                    <li>4 صور شخصية</li>
+                   </ul>
+                  </div>
+                  <button class="popup-btn"><a href="">تسجيل الان</a></button>
+                </div>
+                <div class="overlay"></div>
+                <li><input type="text" placeholder="بحث" class="nav-search">
+                  <span class="search"><input type="checkbox" class="sbox"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg></span></li>
+            </ul>
+            
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="firstHero">
+      <div class="heroContainer">
+      
+
+
+
+      </div>
+    </div>
+
+    <div class="px-4 py-5 my-5 text-center " name="second hero">
+      <h1 class="display-5 fw-bold text-body-emphasis">حول الكلية</h1>
+      <div class="heroStyle center"></div>
+      <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4 mt-5">كلية التقنية الهندسية – زوارة تعتبر من أهم كليات التقنية الهندسية في ليبيا، في البداية كان المعهد العالي للمهن الميكانيكية والكهربائية حيث تأسس في سنة 1996 كمعهد عالي مخول لمنح شهادة الدبلوم العالي إذ تميز بالقدرات الفنية والعلمية بالإضافة الى الإمكانيات المادية من ورش ومعامل تغطى جميع تخصصات المعهد. تنوعت البرامج التدريبية والتعليمية في المعهد حيث شملت الى جانب النظام الدراسي الاساسي دورات تدريب تخصصية ودورات قصيرة مهنية وفي سنة 2010 اعتمد المعهد كلية لمنح شهادة البكالوريوس وكانت تلك خطوة هامة في تاريخ الكلية.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a class="linkbuton" href="about.html">معرفة المزيد</a>
+        </div>
+      </div>
+    </div>
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+          <div class="row text-center">
+              <h1 class="display-3 ">  الاخبار والإعلانات</h1>
+              <div class="heading-line"></div>
+              <p class="lead mt-4">
+                  </p>
           </div>
+          <!--News photos-->
+          <div class="row">
+              <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/NEWS-7.jpg" alt="" class="img-fluid">
+                      
+                          <div class="caption">
+                              <h4>الاسم هنا 1</h4>
+                              <p>categort projact</p>
+                          </div>
+                      
+                  </div>
+              </div>
+              <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-8.jpg" alt="" class="img-fluid">
+                      
+                          <div class="caption">
+                              <h4>الاسم هنا 2</h4>
+                              <p>categort projact</p>
+                          </div>
+                      
+                  </div>
+              </div>
+              <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-9.jpg" alt="" class="img-fluid">
+                      
+                          <div class="caption">
+                              <h4>الاسم هنا 3</h4>
+                              <p>categort projact</p>
+                          </div>
+                      
+                  </div>
+              </div>
+              <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-1.jpg"" class="img-fluid">
+                      
+                          <div class="caption">
+                              <h4>الاسم هنا 4</h4>
+                              <p>categort projact</p>
+                          </div>
+                      
+                  </div>
+              </div>
+              <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-2.jpg" alt="" class="img-fluid">
+                    
+                          <div class="caption">
+                              <h4>الاسم هنا 5</h4>
+                              <p>categort projact</p>
+                          </div>
+                      
+                  </div>
+              </div>
+              <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-3.jpg" alt="" class=" imge">
+                     
+                          <div class="caption">
+                              <h4>إعلان هام</h4>
+                              <p>على الطلبة المتواجد اسمهم التوجه الى قالدراسة والإمتحانات </p>
+                          </div>
+                      
+                  </div>
+              </div>
+
+              <!-- <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-4.jpg" alt="" class="img-fluid">
+                      <div class="portfolio-info">
+                          <div class="caption">
+                              <h4>الاسم هنا 7</h4>
+                              <p>categort projact</p>
+                          </div>
+                      </div>
+                  </div>
+              </div> -->
+              <!-- <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-5.jpg" alt="" class="img-fluid">
+                      <div class="portfolio-info">
+                          <div class="caption">
+                              <h4>الاسم هنا 8</h4>
+                              <p>categort projact</p>
+                          </div>
+                      </div>
+                  </div>
+              </div> -->
+              <!-- <div class="col-lg-4 col-ms6">
+                  <div class="news-box shadow">
+                      <img src="content/News/News-6.jpg" alt="" class="img-fluid">
+                      <div class="portfolio-info">
+                          <div class="caption">
+                              <h4>الاسم هنا 9</h4>
+                              <p>categort projact</p>
+                          </div>
+                      </div>
+                  </div>
+              </div> -->
+          </div>
+      </div> 
+  </section>
+  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+    <a class="linkbuton " href="about.html">معرفة المزيد</a>
+  </div>
+    <div class="px-4 py-5 my-5 text-center " name="second hero">
+    <h1 class="display-5 fw-bold text-body-emphasis">حول الكلية</h1>
+    <div class="heroStyle center"></div>
+    <div class="container col-xxl-8 px-4 py-5 " name="third hero">
+      <div class="row  align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-4">
+          <p class="lead mb-5"> most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
+          <a class="linkbuton" href="workshops.html">جميع ورشات العمل</a>
+
+        </div>
+        <div class="col-lg-8">
+           <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive</h1>
+          <p class="lead">Quickly design and customize responsive mobile-</p>
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive</h1>
+          <p class="lead">Quickly design and customize responsive mobile-</p>
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive</h1>
+          <p class="lead">Quickly design and customize responsive mobile-</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="numbers py-5">
+        <div class="numbersTitle mt-5">
+          <h1 class="display-5 fw-bold text-body-emphasis"> الكلية في ارقام</h1>
+          <div class="heroStyle center"></div>
+        </div>
+
+        <div class="numbersCards mb-5">
+          <div class="numberCard">
+              <div class="numberImageCon ">
+                  <div class="numberImage foundationicon" ></div>
+              </div>
+              <div class="line" >تأسست سنة </div>
+              <div class="numberPer" >1996 </div>
+              <div class="numberTex">
+                <div class="line" > ميلادي </div>
+                
+              </div>
+          </div>
+
           <div class="numbersCards">
             <div class="numberCard">
-                <div class="numberImageCon">
-                    <div class="numberImage" ></div>
+                <div class="numberImageCon ">
+                    <div class="numberImage studenticon" ></div>
                 </div>
-                <div class="numberPer" >94%</div>
+                <div class="line" >يدرس في الكلية </div>
+                <div class="numberPer" >700</div>
                 <div class="numberTex">
-                  <div class="line" > Lorem ipsum dolor sit amet  </div>
-                  <div class="line" >Lorem ipsum dolor sit amet  </div>
+                  
+                  <div class="line" > طالب وطالبة </div>
                 </div>
               </div>
             </div>
             <div class="numbersCards">
               <div class="numberCard">
-                  <div class="numberImageCon">
-                      <div class="numberImage" ></div>
+                  <div class="numberImageCon ">
+                      <div class="numberImage teachericon" ></div>
                   </div>
-                  <div class="numberPer" >94%</div>
+                  <div class="line" > يُدرِس في الكلية</div>
+                  <div class="numberPer" >200</div>
                   <div class="numberTex">
-                    <div class="line" > Lorem ipsum dolor sit amet  </div>
-                    <div class="line" >Lorem ipsum dolor sit amet  </div>
+                    <div class="line" >عضو هيئة تدريس</div>
                   </div>
                 </div>
               </div>
               <div class="numbersCards">
                 <div class="numberCard">
-                    <div class="numberImageCon">
-                        <div class="numberImage" ></div>
+                    <div class="numberImageCon ">
+                        <div class="numberImage workersicon" ></div>
                     </div>
-                    <div class="numberPer" >94%</div>
+                    <div class="line" > يعمل في الكلية</div>
+                    <div class="numberPer" >300</div>
                     <div class="numberTex">
-                      <div class="line" > Lorem ipsum dolor sit amet  </div>
-                      <div class="line" >Lorem ipsum dolor sit amet  </div>
+                      <div class="line" >موضف/ة</div>
                     </div>
                   </div>
                 </div>
+                <div class="numbersCards">
+                  <div class="numberCard">
+                      <div class="numberImageCon  ">
+                          <div class="numberImage graduatesicon" ></div>
+                      </div>
+                      <div class="line" > الخريجين </div>
+                      <div class="numberPer" >100</div>
+                      <div class="numberTex">
+                        <div class="line" > خريج/ة </div>
+                      </div>
+                    </div>
+                  </div>
 
 
-    
-  </div>
-</div>
-
-  <div class="px-4 py-5 my-5 text-center" name="forth hero">
-    <div class="numbersTitle my-5">
-      <span>QUICK FACTS</span>
-    </div>
-    <h1 class="display-5 fw-bold text-body-emphasis">Centered hero</h1>
-    <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4 mt-5">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <a class="linkbuton" href="">Explore programs</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="fifth-hero">
-    <h1 class="title5">News & Events</h1>
-    <h2 class="side5">LATEST NEWS</h2>
-    <div class="main5">
-      <a class="linkbuton top5" href="">Explore programs</a>
-      <div class="content5">
-        <div class="text-container">
-        <h2>Randoim content</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum ratione libero quidem rerum nostrum laudantium, soluta commodi animi voluptatibus</p>
-        </div>
-      </div>
-      <a class="sideB5" href="">Explore programs</a>
-    </div>
-  </div>
-
-
-  <div name="pictures"></div>
-
-
-  <section class="mail">
-    <div class="mail-container">
-        <div class="main-mail">
-            <h2 class="mail-head">Send me information!</h2>
-            <p class="mail-p">Have a question or want to get some additional information by email or mail? Click the button below and drop us a line and we’ll be in touch lickety-split.</p>
-            <a href="" class="mail-button" >Request information package</a>
-            <div class="mail-image"></div>
-        </div>
-    </div>
-</section>
       
-
-
-<footer style="background-color: rgb(37, 37, 37); position: relative; bottom: 0; left: 0;">
-  <div class="container py-3">
-    <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 text-white">
-      <p class="col-md-4 mb-0 ">© 2023 Company, Inc</p>
-  
-      <a href="/" class="col-md-4 d-flex align-items-center text-white justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-      </a>
-  
-      <ul class="nav col-md-4  justify-content-end">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Home</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
-      </ul>
     </div>
   </div>
-</footer>
+
+    <div class="px-4 py-5 my-5 text-center" name="forth hero">
+      <div class="numbersTitle my-5">
+        <span>QUICK FACTS</span>
+      </div>
+      <h1 class="display-5 fw-bold text-body-emphasis">Centered hero</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4 mt-5">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a class="linkbuton" href="">Explore programs</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="fifth-hero">
+      <h1 class="title5">الأخبار والإعلانات</h1>
+      <div class="main5">
+        <a class="linkbuton top5" href="">أخـــر الاخبــــــار</a>
+        <div class="content5">
+          <!-- <div class="text-container">
+          <h2>Randoim content</h2>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum ratione libero quidem rerum nostrum laudantium, soluta commodi animi voluptatibus</p>
+          </div> -->
+        </div>
+        <a class="sideB5 linkbuton" href="">كـــل الاخبــــــار</a>
+      </div>
+    </div>
 
 
+    <div name="pictures"></div>
 
 
+    <section class="mail">
+      <div class="mail-container">
+          <div class="main-mail">
+              <h2 class="mail-head">راسلنا </h2>
+              <p class="mail-p">ان كان لديكم اي استفسارات او اي معلومات إضافية ارجاء ضغط على الزر أدناه واكتبوا لنا وسنكون على تواصل معكم</p>
+              <a href="" class="mail-button" >Request information package</a>
+              <div class="mail-image"></div>
+          </div>
+      </div>
+  </section>
+        
+
+  
+  <footer style="background-color: rgb(37, 37, 37); position: relative; bottom: 0; left: 0;">
+    <div class="container py-3">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 text-white">
+        <p class="col-md-4 mb-0 ">© 2023 Company, Inc</p>
+    
+        <a href="/" class="col-md-4 d-flex align-items-center text-white justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        </a>
+    
+        <ul class="nav col-md-4  justify-content-end">
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 
 
-<%- include("partials/footer"); -%>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
