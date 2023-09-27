@@ -3,6 +3,12 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 const bodyParser = require("body-parser");
 
+
+const fs = require("fs");
+const multer = require("multer");
+const path = require("path");
+
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -106,17 +112,40 @@ async function main(){
     app.get("/workShops", function(req, res){
         res.render("forms/workShops", {});
     })
-    app.post("/workShops", function(req, res){
-        const workshop = new WorkShop({
-            image : req.body.image,
-            title : req.body.title,
-            date : req.body.date,
-            body : req.body.body,
-            duration : req.body.duration,
-            place: req.body.place
-        })
-        workshop.save()
-        res.redirect("/workShop")
+
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, 'public/uploads/');
+        },
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        }
+      });
+      
+    // const upload = multer({ dest: 'uploads/' })
+    const upload = multer({ storage: storage });
+    app.post("/workShops", upload.single('image'), function(req, res){
+        console.log(__dirname);
+        console.log(req.file);
+        fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/uploads/" + req.body.title + ".jpg", ()=>{});
+        const path = "uploads/" + req.body.title + ".jpg";
+        res.send('<img src="' + path + '" width="120px" alt="asd">');
+        // res.redirect("/workShops");
+        return;
+        fs.rename(req.file.path, __dirname + req.body.image, err => {
+            if (err) console.log(err);
+            else console.log("water");});
+            res.redirect("/workShops");
+        // const workshop = new WorkShop({
+        //     image : req.body.image,
+        //     title : req.body.title,
+        //     date : req.body.date,
+        //     body : req.body.body,
+        //     duration : req.body.duration,
+        //     place: req.body.place
+        // })
+        // workshop.save()
+        // res.redirect("/workShop")
     });
 
 
