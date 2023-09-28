@@ -3,17 +3,41 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 const bodyParser = require("body-parser");
 
-
 const fs = require("fs");
 const multer = require("multer");
-const path = require("path");
 
+const session = require('express-session');
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+const { request } = require("http");
+const { log } = require("console");
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+
+app.use(session({
+    secret: "cetz secret.",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    }
+  });
+  
+const upload = multer({ storage: storage });
+
 
 main().catch(err => console.log(err));
 
@@ -28,12 +52,15 @@ async function main(){
         duration : String,
         place: String
     })
+
     const userScema = new mongoose.Schema({
         name : String,
-        userName : String,
+        username : String,
         password : String,
         level : Number
     })
+    userScema.plugin(passportLocalMongoose);
+
     const studentScema = new mongoose.Schema({
         name : String,
         idNo : String,
@@ -46,9 +73,14 @@ async function main(){
         selfie : String
     })
     
+
     const WorkShop = new mongoose.model("WorkShop" , workShopScema);
     const User = new mongoose.model("User" , userScema);
     const Student = new mongoose.model("Student" , studentScema);
+
+    passport.use(User.createStrategy());
+    passport.serializeUser(User.serializeUser());
+    passport.deserializeUser(User.deserializeUser());
 
     app.get("/", function(req, res){
         res.render("home", {})
@@ -101,29 +133,78 @@ async function main(){
     app.get("/signUp", function(req, res){
         res.render("forms/signup", {});
     })
-    app.get("/login", function(req, res){
-        res.render("forms/login", {});
+    // upload.array('photos', 12),
+    app.post("/signUp", function(req, res) {
+        const student = new Student({
+            name : req.body.name,
+            idNo : req.body.idNo,
+            phoneNo : req.body.phoneNo,
+            cert : req.body.cert,
+            Behavior : req.body.Behavior,
+            health : req.body.health,
+            birth : req.body.birth,
+            resdient : req.body.resdient,
+            selfie : req.body.selfie
+        })
+        student.save()
+        res.redirect("/signUp");
     })
+
+    app.get("/login", async function(req, res){
+        if (req.isAuthenticated()) {
+            res.redirect("/students");
+        } else {
+             res.render("forms/login", {});
+        }
+    })
+    app.post("/login", passport.authenticate('local', { successRedirect: '/students', failWithError: true }),
+    function(err, req, res, next) {
+        res.redirect("/login");
+    });
+
     app.get("/addUser", function(req, res){
         res.render("forms/addUser", {});
     })
+    app.post("/addUser",  async function(req, res){
 
+        let name = req.body.name;
+        let username = req.body.username;
+        let pass = req.body.password;
 
+        User.register({name: name, username: username, level: 1}, pass, (err, user) => {
+            if (err) {
+                console.log(err);
+            }
+            res.redirect("/addUser");
+        });
+    })
+
+    app.get("/students", async function(req, res){
+        if (req.isAuthenticated()){
+            let students = await Student.find({} , {name : 1, idNo : 1, phoneNo : 1})
+            res.render("user/student", {Students : students});
+            } else {
+                res.redirect("/login");
+            }
+    })
+    app.get("/student-info", async function(req, res){
+
+        let students = await Student.findOne({idNo: "2000000"});
+        res.render("user/student-info", {student : students});
+
+    })
+    app.get("/users", async function(req, res){
+        let users = await User.find({}, {name : 1, username : 1, level : 1})
+        res.render("user/users", {Users : users});
+    })
     app.get("/workShops", function(req, res){
         res.render("forms/workShops", {});
     })
+    app.get("/edit-workShops", function(req, res){
+        res.render("forms/edit-workShop", {});
+    })
 
-    const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-          cb(null, 'public/uploads/');
-        },
-        filename: (req, file, cb) => {
-          cb(null, file.originalname);
-        }
-      });
-      
-    // const upload = multer({ dest: 'uploads/' })
-    const upload = multer({ storage: storage });
+
     app.post("/workShops", upload.single('image'), function(req, res){
         console.log(__dirname);
         console.log(req.file);
@@ -132,20 +213,16 @@ async function main(){
         res.send('<img src="' + path + '" width="120px" alt="asd">');
         // res.redirect("/workShops");
         return;
-        fs.rename(req.file.path, __dirname + req.body.image, err => {
-            if (err) console.log(err);
-            else console.log("water");});
-            res.redirect("/workShops");
-        // const workshop = new WorkShop({
-        //     image : req.body.image,
-        //     title : req.body.title,
-        //     date : req.body.date,
-        //     body : req.body.body,
-        //     duration : req.body.duration,
-        //     place: req.body.place
-        // })
-        // workshop.save()
-        // res.redirect("/workShop")
+        const workshop = new WorkShop({
+            image : path,
+            title : req.body.title,
+            date : req.body.date,
+            body : req.body.body,
+            duration : req.body.duration,
+            place: req.body.place
+        })
+        workshop.save()
+        res.redirect("/workShop")
     });
 
 
