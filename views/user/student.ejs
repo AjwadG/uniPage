@@ -22,9 +22,12 @@
                 <p class="college-name" style="letter-spacing: 0.01em; word-spacing: 0.01em; position: relative; top: 6px;">كلية التقنية الهندسية زوارة</p>
             </div>
             <div >
-                <a href="/workshops" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">ورشات العمل</a>
-                <a href="/students" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">الطلبة</a>
+                <% if(lvl == 0) { %>
                 <a href="/users" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">المشرفين</a>
+                <%}; %>
+                <a href="/workshops" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">اضافة ورشة العمل</a>
+                <!-- <a href="/students" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">الطلبة</a> -->
+                <a href="/logout" class="btn btn-danger">تسجيل الخروج</a>
             </div>
         </div>
    </div>
@@ -43,7 +46,7 @@
                                 <h2><%= student.name %></h2>
                                 <h4>الرقم الوطني : <%= student.idNo %></h4>
                                 <h4>رقم الهاتف : <%= student.phoneNo %></h4>
-                                <a href="/student-info" class="mt-2 btn btn-danger">عرض بيانات الطالب</a>
+                                <a href="/student-info_<%= student.idNo %>" class="mt-2 btn btn-danger">عرض بيانات الطالب</a>
                             </div>
                         </div>
                         <% }); %>

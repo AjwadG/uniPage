@@ -96,9 +96,12 @@
               <p class="college-name" style="letter-spacing: 0.01em; word-spacing: 0.01em; position: relative; top: 6px;">كلية التقنية الهندسية زوارة</p>
           </div>
           <div >
-              <a href="/workshops" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">ورشات العمل</a>
-              <a href="/students" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">الطلبة</a>
-              <a href="/users" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">المشرفين</a>
+            <a href="/students" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">الطلبة</a>
+            <% if(lvl == 0) { %>
+            <a href="/users" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">المشرفين</a>
+            <%}; %>
+            <a href="/workshops" style="text-decoration: double; color: white; font-size: 24px; margin-right: 15px;">اضافة ورشة العمل</a>
+            <a href="/logout" class="btn btn-danger">تسجيل الخروج</a>
           </div>
       </div>
     </div>
@@ -111,9 +114,9 @@
   <section class="py-3 text-center container">
     <div class="row pt-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw">أروى نجيب القندوز</h1>
-        <h1 class="fw">الرقم الوطني : 200000000000</h1>
-        <h1 class="fw">رقم الهاتف : 091000000</h1>
+        <h1 class="fw"><%= student.name %></h1>
+        <h1 class="fw">الرقم الوطني : <%= student.idNo %></h1>
+        <h1 class="fw">رقم الهاتف : <%= student.phoneNo %></h1>
         <p>
           <a href="#" class="btn px-3 btn-danger my-2">حدف</a>
           <a href="#" class="btn px-3 btn-primary my-2">تعديل</a>
@@ -127,11 +130,11 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
           <div class="card shadow-sm">
-            <img class="bd-placeholder-img card-img-top" width="100%"  src="content/images/arduino.jpg" role="img">
+            <img class="bd-placeholder-img card-img-top" width="100%"  src="<%= student.birth %>" role="img">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <a href="<%= student.birth %>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
                 </div>
                 <small class="text-body-secondary">شهادة الميلاد</small>
               </div>
@@ -140,11 +143,11 @@
         </div>
         <div class="col">
           <div class="card shadow-sm">
-            <img class="bd-placeholder-img card-img-top" width="100%"  src="content/images/arduino.jpg" role="img">
+            <img class="bd-placeholder-img card-img-top" width="100%"  src="<%= student.cert %>" role="img">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <a href="<%= student.cert %>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
                 </div>
                 <small class="text-body-secondary">الشهادة التانوية</small>
               </div>
@@ -153,11 +156,11 @@
         </div>
         <div class="col">
           <div class="card shadow-sm">
-            <img class="bd-placeholder-img card-img-top" width="100%"  src="content/images/arduino.jpg" role="img">
+            <img class="bd-placeholder-img card-img-top" width="100%"  src="<%= student.Behavior %>" role="img">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <a href="<%= student.Behavior %>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
                 </div>
                 <small class="text-body-secondary">حسن السيرة والسولوك</small>
               </div>
@@ -167,11 +170,11 @@
 
         <div class="col">
           <div class="card shadow-sm">
-            <img class="bd-placeholder-img card-img-top" width="100%"  src="content/images/arduino.jpg" role="img">
+            <img class="bd-placeholder-img card-img-top" width="100%"  src="<%= student.health %>" role="img">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <a href="<%= student.health %>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
                 </div>
                 <small class="text-body-secondary">شهادة صحية</small>
               </div>
@@ -180,11 +183,11 @@
         </div>
         <div class="col">
           <div class="card shadow-sm">
-            <img class="bd-placeholder-img card-img-top" width="100%"  src="content/images/arduino.jpg" role="img">
+            <img class="bd-placeholder-img card-img-top" width="100%"  src="<%= student.resdient %>" role="img">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <a href="<%= student.resdient %>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
                 </div>
                 <small class="text-body-secondary">شهادة الاقامة</small>
               </div>
@@ -193,11 +196,11 @@
         </div>
         <div class="col">
           <div class="card shadow-sm">
-            <img class="bd-placeholder-img card-img-top" width="100%"  src="content/images/arduino.jpg" role="img">
+            <img class="bd-placeholder-img card-img-top" width="100%"  src="<%= student.selfie %>" role="img">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <a href="<%= student.selfie %>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
                 </div>
                 <small class="text-body-secondary">صورة شخصية</small>
               </div>

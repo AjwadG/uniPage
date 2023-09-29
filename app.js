@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 const bodyParser = require("body-parser");
 
-const fs = require("fs");
-const multer = require("multer");
+
+const multer = require('multer');
+const fs = require('fs');
 
 const session = require('express-session');
 const passport = require("passport");
@@ -124,8 +125,10 @@ async function main(){
     });
 
     app.get("/workShop", async function(req, res){
+        let a = -1;
+        if (req.isAuthenticated()) {a = req.user.level;};
         let workShops = await WorkShop.find({})
-        res.render("workShop", {workShops: workShops,})
+        res.render("workShop", {workShops: workShops, lvl: a})
     });
 
    
@@ -133,37 +136,58 @@ async function main(){
     app.get("/signUp", function(req, res){
         res.render("forms/signup", {});
     })
-    // upload.array('photos', 12),
-    app.post("/signUp", function(req, res) {
+    const fields = [{ name: 'cert', maxCount: 1 }, { name: 'Behavior', maxCount: 1 },
+                    { name: 'health', maxCount: 1 }, { name: 'birth', maxCount: 1 },
+                    { name: 'resdient', maxCount: 1 }, { name: 'selfie', maxCount: 1 }];
+
+    app.post("/signUp", upload.fields(fields), function(req, res) {
+        for (const [key, value] of Object.entries(req.files))
+        {
+            let newpath = "uploads/students/" + req.body.idNo + value[0].fieldname + "." + value[0].originalname.split('.')[1];
+            fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" +newpath, ()=>{});
+            value[0].path = newpath;
+        }
         const student = new Student({
             name : req.body.name,
             idNo : req.body.idNo,
             phoneNo : req.body.phoneNo,
-            cert : req.body.cert,
-            Behavior : req.body.Behavior,
-            health : req.body.health,
-            birth : req.body.birth,
-            resdient : req.body.resdient,
-            selfie : req.body.selfie
+            cert : req.files["cert"][0].path,
+            Behavior : req.files["Behavior"][0].path,
+            health : req.files["health"][0].path,
+            birth : req.files["birth"][0].path,
+            resdient : req.files["resdient"][0].path,
+            selfie : req.files["selfie"][0].path
         })
         student.save()
-        res.redirect("/signUp");
+        res.redirect("/students");
     })
 
     app.get("/login", async function(req, res){
-        if (req.isAuthenticated()) {
-            res.redirect("/students");
+        if (req.isAuthenticated())
+        {
+            if (req.user.level == 0) {
+                res.redirect("/users");
+            } else {
+                res.redirect("/students");
+            }
         } else {
-             res.render("forms/login", {});
+             res.render("forms/login", {msg : null});
         }
     })
-    app.post("/login", passport.authenticate('local', { successRedirect: '/students', failWithError: true }),
+    app.post("/login", passport.authenticate('local', { successRedirect: '/login', failWithError: true }),
     function(err, req, res, next) {
-        res.redirect("/login");
+        res.render("forms/login", {msg: "Wrong userName or Password"});
     });
 
     app.get("/addUser", function(req, res){
-        res.render("forms/addUser", {});
+        if (req.isAuthenticated())
+        {
+            if (req.user.level == 0) {
+                res.render("forms/addUser", {});
+            } 
+        } else {
+             res.redirect("/");
+        }
     })
     app.post("/addUser",  async function(req, res){
 
@@ -182,20 +206,36 @@ async function main(){
     app.get("/students", async function(req, res){
         if (req.isAuthenticated()){
             let students = await Student.find({} , {name : 1, idNo : 1, phoneNo : 1})
-            res.render("user/student", {Students : students});
+            res.render("user/student", {Students : students, lvl: req.user.level});
             } else {
                 res.redirect("/login");
             }
     })
-    app.get("/student-info", async function(req, res){
-
-        let students = await Student.findOne({idNo: "2000000"});
-        res.render("user/student-info", {student : students});
+    app.get("/student-info_:idNO", async function(req, res){
+        if (req.isAuthenticated()) {
+            const studentID = req.params.idNO;
+            let students = await Student.findOne({idNo: studentID});
+            if (students == null)
+                res.redirect("/students");
+            else
+                res.render("user/student-info", {student : students, lvl : req.user.level});
+        }
+        else {
+            res.redirect("/");
+        }
 
     })
     app.get("/users", async function(req, res){
-        let users = await User.find({}, {name : 1, username : 1, level : 1})
-        res.render("user/users", {Users : users});
+        if (req.isAuthenticated()) {
+            if (req.user.level == 0)
+            {
+                let users = await User.find({}, {name : 1, username : 1, level : 1})
+                res.render("user/users", {Users : users});
+                return;
+            }
+        }
+        res.redirect("/");
+
     })
     app.get("/workShops", function(req, res){
         res.render("forms/workShops", {});
@@ -204,10 +244,14 @@ async function main(){
         res.render("forms/edit-workShop", {});
     })
 
-
+    app.get("/logout", function(req, res){
+        req.logout(function(err) {
+            if (err) { console.log(err); } else {
+                res.redirect('/');
+            }});
+    })
+    
     app.post("/workShops", upload.single('image'), function(req, res){
-        console.log(__dirname);
-        console.log(req.file);
         fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/uploads/" + req.body.title + ".jpg", ()=>{});
         const path = "uploads/" + req.body.title + ".jpg";
         res.send('<img src="' + path + '" width="120px" alt="asd">');

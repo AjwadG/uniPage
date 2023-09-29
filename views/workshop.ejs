@@ -53,7 +53,11 @@
                                                         <div class="workShop-text">
                                                             <div class="workShop-text-title"><a href="">تعلم استخدام لوحة Arduino وبرمجتها&nbsp;</a></div>
                                                             <div class="workShop-text-info">
-                                                                <div class="workShop-text-info-info"> بدأت:&nbsp;12 فبراير, 2023</div>
+                                                                
+                                                                <div class="workShop-text-info-info"> بدأت:&nbsp;12 فبراير, 2023 <% if(lvl != -1) { %>
+                                                                    <a href="#<%= workShops[0].title %>" class="btn btn-secondary">تعديل</a>
+                                                                    <%}; %>
+                                                                </div>
                                                             </div>
                                                             <div class="workShop-text-text"> بعض المحاور الأساسية:
                                                                 التعرف على كيفية توصيل الحساسات مع متحكم الأردونيو والتعرف أيضاً على المكونات المستخدمة في بناء الروبوتات وتوصيلها مع متحكم الاردونيو .

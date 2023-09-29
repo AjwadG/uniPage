@@ -186,10 +186,11 @@ li:has(.sbox:checked) .nav-search{
 .popup-btn{
 border-radius: 5px;
    padding: 5px;
+   display: inline-block;
    background-color: #b7202e;
    border: none;
    transition-duration: 0.4s;
-   margin-right: 42%;
+   margin: auto;
    font-size: 21px;
    margin-bottom: 20px;
    color: #fff;
