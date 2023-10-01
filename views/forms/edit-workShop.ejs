@@ -11,28 +11,22 @@
 
 <main class="form-signin mt-3 pb-0 w-100 mx-auto">
   <img src="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png" width="120px" alt="asd">
-  <form method="post" action="/edit-workShops" enctype="multipart/form-data">
+  <form method="post" action="/edit-workShops">
     <h1 class="h3 mb-3 mt-3 fw-normal">تعديل ورشة العمل</h1>
 
     <div class="form-floating ">
-      <input type="text" name="title" class="form-control top"  placeholder="Title" required>
+      <input type="text" name="title" class="form-control top"  placeholder="Title" value="<%= workShop.title %>" required>
+      <input type="text" name="old" value="<%= workShop.title %>" style="display: none;">
+      <input type="text" name="path" value="<%= workShop.image %>" style="display: none;">
       <label>Title</label>
     </div>
     <div class="form-floating ">
-      <input type="date" name="date" class="form-control mid"  placeholder="date" required>
+      <input type="date" name="date" class="form-control mid"  placeholder="date" value="<%= workShop.dates %>" required>
       <label>Date</label>
     </div>
     <div class="form-floating ">
-      <input type="text" name="body" class="form-control mid"  placeholder="body" required>
+      <input type="text" name="body" class="form-control bot"  placeholder="body" value="<%= workShop.body %>" required>
       <label>Description</label>
-    </div>
-    <div class="form-floating ">
-      <input type="text" name="duration" class="form-control mid"  placeholder="duration" required>
-      <label>Duration</label>
-    </div>
-    <div class="form-floating ">
-      <input type="text" name="place" class="form-control bot"  placeholder="place" required>
-      <label>Place</label>
     </div>
 
     <button class="w-100 btn mt-3 btn-lg btn-danger" type="submit">تعديل</button>

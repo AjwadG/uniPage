@@ -1,35 +1,14 @@
-    
-    $( document ).ready(()=> {
-    let i = 0;
-    const text = $(".upNumber").text();
-    setInterval(() => {
-        i++
-        if (i < 400)
-        {
-        $(".upNumber").text(Math.floor(Math.random()* 100));
-        } else{
-            $(".upNumber").text(text);
-            clearInterval()
-        }
-    }, 0);
-
-
+let sign_btn = document.querySelectorAll('.sign-btn');
+sign_btn.forEach(btn => { btn.addEventListener('click', function() {
+        btn.nextElementSibling.style.display ='block';
+        btn.nextElementSibling.nextElementSibling.style.display ='block';
+   });
 })
 
-document.getElementById('sign-btn').addEventListener('click', function() {
-    document.querySelector('.model').style.display='block';
-    
-});
-document.getElementById('sign-btn').addEventListener('click', function() {
-    document.querySelector('.overlay').style.display='block';
-    
-});
-document.getElementById('close-btn').addEventListener('click', function() {
-    document.querySelector('.model').style.display='none';
-    
-});
-document.getElementById('close-btn').addEventListener('click', function() {
-    document.querySelector('.overlay').style.display='none';
-    
-});
+ let close_btn = document.querySelectorAll('.close-btn');
+ close_btn.forEach(btn => { btn.addEventListener('click', function() {
+        btn.parentElement.parentElement.style.display='none';
+        btn.parentElement.parentElement.nextElementSibling.style.display='none';
+    });
+ })
 

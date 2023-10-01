@@ -48,12 +48,10 @@ async function main(){
     const workShopScema = new mongoose.Schema({
         image : String,
         title : String,
-        date : String,
-        body : String,
-        duration : String,
-        place: String
+        date : Date,
+        dates : String,
+        body : String
     })
-
     const userScema = new mongoose.Schema({
         name : String,
         username : String,
@@ -83,59 +81,43 @@ async function main(){
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
 
-    app.get("/", function(req, res){
-        res.render("home", {})
-    });
+    app.get("/", function(req, res){ res.render("home", {}) });
 
-    app.get("/about", function(req, res){
-        res.render("about", {})
-    });
+    app.get("/about", function(req, res){ res.render("about", {}) });
 
-    app.get("/architecture", function(req, res){
-        res.render("departments/architecture-department", {})
-    });
+    app.get("/architecture", function(req, res){ res.render("departments/architecture-department", {}) });
 
-    app.get("/civil", function(req, res){
-        res.render("departments/civil-department", {})
-    });
+    app.get("/civil", function(req, res){ res.render("departments/civil-department", {}) });
 
-    app.get("/communication", function(req, res){
-        res.render("departments/communication-department", {})
-    });
+    app.get("/communication", function(req, res){ res.render("departments/communication-department", {}) });
 
-    app.get("/computer", function(req, res){
-        res.render("departments/computer-department", {})
-    });
+    app.get("/computer", function(req, res){ res.render("departments/computer-department", {}) });
 
-    app.get("/general", function(req, res){
-        res.render("departments/general-department", {})
-    });
+    app.get("/general", function(req, res){ res.render("departments/general-department", {}) });
 
-    app.get("/oil", function(req, res){
-        res.render("departments/oil-department", {})
-    });
+    app.get("/oil", function(req, res){ res.render("departments/oil-department", {}) });
 
-    app.get("/dean", function(req, res){
-        res.render("dean-of-college", {})
-    });
+    app.get("/dean", function(req, res){ res.render("dean-of-college", {}) });
 
 
-    app.get("/about", function(req, res){
-        res.render("about", {})
-    });
+    app.get("/about", function(req, res){ res.render("about", {}) });
+
+    app.get("/signUp", function(req, res){ res.render("forms/signup", {}); })
 
     app.get("/workShop", async function(req, res){
         let a = -1;
         if (req.isAuthenticated()) {a = req.user.level;};
         let workShops = await WorkShop.find({})
-        res.render("workShop", {workShops: workShops, lvl: a})
+        res.render("workShop", {workShops: workShops, lvl: a, now: Date.now()})
+    });
+    app.post("/workShop", async function(req, res){
+        if (req.isAuthenticated() && req.user.level >= 0) {
+            await WorkShop.deleteOne({title: req.body.title});
+        }
+        res.redirect("workShop")
     });
 
    
-
-    app.get("/signUp", function(req, res){
-        res.render("forms/signup", {});
-    })
     const fields = [{ name: 'cert', maxCount: 1 }, { name: 'Behavior', maxCount: 1 },
                     { name: 'health', maxCount: 1 }, { name: 'birth', maxCount: 1 },
                     { name: 'resdient', maxCount: 1 }, { name: 'selfie', maxCount: 1 }];
@@ -143,9 +125,8 @@ async function main(){
     app.post("/signUp", upload.fields(fields), function(req, res) {
         for (const [key, value] of Object.entries(req.files))
         {
-            let newpath = "uploads/students/" + req.body.idNo + value[0].fieldname + "." + value[0].originalname.split('.')[1];
-            fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" +newpath, ()=>{});
-            value[0].path = newpath;
+            value[0].path = "uploads/students/" + req.body.idNo + value[0].fieldname + "." + value[0].originalname.split('.')[1];
+            fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" + newpath, ()=>{});
         }
         const student = new Student({
             name : req.body.name,
@@ -165,11 +146,10 @@ async function main(){
     app.get("/login", async function(req, res){
         if (req.isAuthenticated())
         {
-            if (req.user.level == 0) {
+            if (req.user.level == 0)
                 res.redirect("/users");
-            } else {
+            else
                 res.redirect("/students");
-            }
         } else {
              res.render("forms/login", {msg : null});
         }
@@ -191,15 +171,13 @@ async function main(){
     })
     app.post("/addUser",  async function(req, res){
 
-        let name = req.body.name;
-        let username = req.body.username;
-        let pass = req.body.password;
+        let name = req.body.name, username = req.body.username, pass = req.body.password;
 
         User.register({name: name, username: username, level: 1}, pass, (err, user) => {
-            if (err) {
-                console.log(err);
-            }
-            res.redirect("/addUser");
+            if (err)
+                res.redirect("/addUser");
+            else
+                res.redirect("/");
         });
     })
 
@@ -207,14 +185,14 @@ async function main(){
         if (req.isAuthenticated()){
             let students = await Student.find({} , {name : 1, idNo : 1, phoneNo : 1})
             res.render("user/student", {Students : students, lvl: req.user.level});
-            } else {
-                res.redirect("/login");
-            }
+        } else {
+            res.redirect("/login");
+        }
     })
+
     app.get("/student-info_:idNO", async function(req, res){
         if (req.isAuthenticated()) {
-            const studentID = req.params.idNO;
-            let students = await Student.findOne({idNo: studentID});
+            let students = await Student.findOne({idNo: req.params.idNO});
             if (students == null)
                 res.redirect("/students");
             else
@@ -223,25 +201,78 @@ async function main(){
         else {
             res.redirect("/");
         }
-
     })
-    app.get("/users", async function(req, res){
+    app.post("/student-info", async function(req, res) {
+        await Student.deleteOne({username: req.body.idNO}).then(resault => {
+            //fs.rename(__dirname + "/public/" + req.body.path, __dirname + "/public/deleted", () => {});
+        });
+        res.redirect("/students");
+    })
+    
+    app.get("/edit-student:idNo", async function(req, res) {
         if (req.isAuthenticated()) {
-            if (req.user.level == 0)
+            let student = await Student.findOne({idNo: req.params.idNo})
+            if (student != undefined)
             {
-                let users = await User.find({}, {name : 1, username : 1, level : 1})
-                res.render("user/users", {Users : users});
+                res.render("forms/edit-student", {student: student}); 
                 return;
             }
-        }
+        } 
         res.redirect("/");
+    })
+    app.post("/edit-student", async function(req, res){
+        if (req.isAuthenticated()) {
+            await Student.findOneAndUpdate({idNo: req.body.old}, 
+                {idNo: req.body.idNo, name: req.body.name, phoneNo: req.body.phoneNo})
+        } 
+        res.redirect("/student-info_" + req.body.idNo);
+    })
 
+    app.get("/users", async function(req, res){
+        if (req.isAuthenticated() && req.user.level == 0) {
+                let users = await User.find({}, {name : 1, username : 1, level : 1})
+                res.render("user/users", {Users : users});
+        } else {
+        res.redirect("/");
+        }
     })
+    app.post("/users", async function(req, res) {
+        let a = await User.deleteOne({username: req.body.username}).then(resault => {
+            //fs.rename(__dirname + "/public/" + req.body.path, __dirname + "/public/deleted", () => {});
+        });
+        res.redirect("/users");
+    })
+
     app.get("/workShops", function(req, res){
-        res.render("forms/workShops", {});
+        if (req.isAuthenticated()) 
+            res.render("forms/workShops", {});
+        else
+            res.redirect("/");
     })
-    app.get("/edit-workShops", function(req, res){
-        res.render("forms/edit-workShop", {});
+
+    app.get("/edit-workShops:title", async function(req, res){
+        if (req.isAuthenticated()) {
+            let workShop = await WorkShop.findOne({title: req.params.title})
+            if (workShop != undefined)
+            {
+                res.render("forms/edit-workShop", {workShop: workShop}); 
+                return;
+            }
+        } 
+            res.redirect("/");
+    })
+    app.post("/edit-workShops", async function(req, res){
+        if (req.isAuthenticated()) {
+            let path = req.body.path.split(req.body.old)[0] + req.body.title + "." + req.body.path.split(".")[1];
+            
+            await WorkShop.findOneAndUpdate({title: req.body.old}, 
+                {title: req.body.title, date: req.body.date, dates: req.body.date, body: req.body.body, image: path})
+                .then(resault => {
+                    if (resault != null)
+                        fs.rename(__dirname + "/public/" + req.body.path, __dirname + "/public/" + path, () => {});
+                });
+        } 
+        res.redirect("/workShop");
     })
 
     app.get("/logout", function(req, res){
@@ -251,16 +282,14 @@ async function main(){
             }});
     })
     
-    app.post("/workShops", upload.single('image'), function(req, res){
-        fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/uploads/" + req.body.title + ".jpg", ()=>{});
-        const path = "uploads/" + req.body.title + ".jpg";
-        res.send('<img src="' + path + '" width="120px" alt="asd">');
-        // res.redirect("/workShops");
-        return;
+    app.post("/workShops", upload.single('image'), function(req, res) {
+        const path = "uploads/workshops/" + req.body.title + "." +req.file.originalname.split('.')[1];
+        fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/" + path, ()=>{});
         const workshop = new WorkShop({
             image : path,
             title : req.body.title,
             date : req.body.date,
+            dates : req.body.date,
             body : req.body.body,
             duration : req.body.duration,
             place: req.body.place
@@ -268,13 +297,6 @@ async function main(){
         workshop.save()
         res.redirect("/workShop")
     });
-
-
-
-
-
-
-
 
 
     app.listen(process.env.PORT || 3000 , function(){

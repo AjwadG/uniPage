@@ -47,24 +47,41 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <% workShops.forEach(shop => { %>
+                                                    <% if (shop.date >= now) { %>
                                                 <div class="workShop-card">         
                                                     <div class="workShop-card-inner">
-                                                        <img src="content/images/arduino.jpg" class="workShop-card-img">
+                                                        <img src="<%= shop.image %>" class="workShop-card-img">
                                                         <div class="workShop-text">
-                                                            <div class="workShop-text-title"><a href="">تعلم استخدام لوحة Arduino وبرمجتها&nbsp;</a></div>
+                                                            <div class="workShop-text-title"><a href=""><%= shop.title %></a></div>
                                                             <div class="workShop-text-info">
                                                                 
-                                                                <div class="workShop-text-info-info"> بدأت:&nbsp;12 فبراير, 2023 <% if(lvl != -1) { %>
-                                                                    <a href="#<%= workShops[0].title %>" class="btn btn-secondary">تعديل</a>
+                                                                <div class="workShop-text-info-info">ستبدء : <%= shop.dates %> <% if(lvl != -1) { %>
+                                                                    <a href="/edit-workShops<%= shop.title %>" class="btn btn-secondary">تعديل</a>
+                                                                    <button class="sign-btn btn btn-danger">حذف</button>
+                                                                        <div class="model">
+                                                                            <div class="model-header" dir="rtl">
+                                                                            <h3 class="model-title">تنبيه</h3>
+                                                                            <button class="close-btn" id="close-btn">&times;</button>
+                                                                            </div>
+                                                                            <div class="model-body" style="text-align: center;">
+                                                                                <h4 style="font-size: large; display: inline-block;">هل انت متاكد من حدف ورشة العمل <br> <%= shop.title %></h4>
+                                                                            </div>
+                                                                            <div style="display: flex; align-items: center; justify-content: center;">
+                                                                                <form action="/workShop" method="post">
+                                                                                    <input type="text" style="display: none;" name="title" value="<%= shop.title %>">
+                                                                                    <button class="btn btn-danger mb-3 " style="text-decoration: none;">حذف</button>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
                                                                     <%}; %>
                                                                 </div>
                                                             </div>
-                                                            <div class="workShop-text-text"> بعض المحاور الأساسية:
-                                                                التعرف على كيفية توصيل الحساسات مع متحكم الأردونيو والتعرف أيضاً على المكونات المستخدمة في بناء الروبوتات وتوصيلها مع متحكم الاردونيو .
-                                                            </div>
+                                                            <div class="workShop-text-text"><%= shop.body %></div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <% }}); %>
                                                 <div class="workShop-card">         
                                                     <div class="workShop-card-inner">
                                                         <img src="content/images/scrache.jpg" class="workShop-card-img">
@@ -103,6 +120,41 @@
                                         </div>
                                     </div>
                                 </div>
+                                <% workShops.forEach(shop => { %>
+                                    <% if (shop.date <= now) { %>
+                                <div class="workShop-card">         
+                                    <div class="workShop-card-inner">
+                                        <img src="<%= shop.image %>" class="workShop-card-img">
+                                        <div class="workShop-text">
+                                            <div class="workShop-text-title"><a href=""><%= shop.title %></a></div>
+                                            <div class="workShop-text-info">
+                                                
+                                                <div class="workShop-text-info-info"><span>بدأت : </span><%= shop.dates %><% if(lvl != -1) { %>
+                                                    <a href="/edit-workShops<%= shop.title %>" class="btn btn-secondary">تعديل</a>
+                                                        <button class="sign-btn btn btn-danger">حذف</button>
+                                                        <div class="model">
+                                                            <div class="model-header" dir="rtl">
+                                                            <h3 class="model-title">تنبيه</h3>
+                                                            <button class="close-btn" id="close-btn">&times;</button>
+                                                            </div>
+                                                            <div class="model-body" style="text-align: center;">
+                                                                <h4 style="font-size: large; display: inline-block;">هل انت متاكد من حدف ورشة العمل <br> <%= shop.title %></h4>
+                                                            </div>
+                                                            <div style="display: flex; align-items: center; justify-content: center;">
+                                                                <form action="/workShop" method="post">
+                                                                    <input type="text" style="display: none;" name="title" value="<%= shop.title %>">
+                                                                    <button class="btn btn-danger mb-3 " style="text-decoration: none;">حذف</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    <%}; %>
+                                                </div>
+                                            </div>
+                                            <div class="workShop-text-text"><%= shop.body %></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }}); %>
                                 <div class="workShop-card">         
                                     <div class="workShop-card-inner">
                                         <img src="content/images/communication skills.jpg" class="workShop-card-img">
