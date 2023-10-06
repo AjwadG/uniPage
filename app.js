@@ -2,16 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const bodyParser = require("body-parser");
-
-
 const multer = require('multer');
 const fs = require('fs');
-
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
-const { request } = require("http");
-const { log } = require("console");
+
 
 const app = express();
 
@@ -35,7 +31,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
       cb(null, file.originalname);
     }
-  });
+});
   
 const upload = multer({ storage: storage });
 
@@ -43,6 +39,10 @@ const upload = multer({ storage: storage });
 main().catch(err => console.log(err));
 
 async function main(){
+
+    var capacity = 4;
+
+
     await mongoose.connect("mongodb+srv://AjwadG:PIF9RnDFt82uuYJm@cluster0.0ge3uap.mongodb.net/uniDB");
 
     const workShopScema = new mongoose.Schema({
@@ -59,7 +59,6 @@ async function main(){
         level : Number
     })
     userScema.plugin(passportLocalMongoose);
-
     const studentScema = new mongoose.Schema({
         name : String,
         idNo : String,
@@ -99,20 +98,28 @@ async function main(){
 
     app.get("/dean", function(req, res){ res.render("dean-of-college", {}) });
 
+    app.get("/administrations", function(req, res){res.render("administrations", {})});
+    
+    app.get("/offices", function(req, res){res.render("offices", {})});
 
     app.get("/about", function(req, res){ res.render("about", {}) });
 
-    app.get("/signUp", function(req, res){ res.render("forms/signup", {}); })
+    app.get("/signUp", async function(req, res){ 
+        res.render("forms/signup", {access : (await Student.count({}) < capacity)}); 
+    })
 
     app.get("/workShop", async function(req, res){
         let a = -1;
         if (req.isAuthenticated()) {a = req.user.level;};
         let workShops = await WorkShop.find({})
-        res.render("workShop", {workShops: workShops, lvl: a, now: Date.now()})
+        res.render("Shop", {workShops: workShops, lvl: a, now: Date.now()})
     });
+                        // delete button //
     app.post("/workShop", async function(req, res){
         if (req.isAuthenticated() && req.user.level >= 0) {
-            await WorkShop.deleteOne({title: req.body.title});
+            await WorkShop.deleteOne({image: req.body.image}).then(results => {
+                fs.unlinkSync(__dirname + "/public/" + req.body.image)
+            });
         }
         res.redirect("workShop")
     });
@@ -122,11 +129,12 @@ async function main(){
                     { name: 'health', maxCount: 1 }, { name: 'birth', maxCount: 1 },
                     { name: 'resdient', maxCount: 1 }, { name: 'selfie', maxCount: 1 }];
 
-    app.post("/signUp", upload.fields(fields), function(req, res) {
+    app.post("/signUp", upload.fields(fields), async function(req, res) {
+        if (await Student.findOne({idNo : req.body.idNo}) == undefined) {res.redirect("/signUp");}
         for (const [key, value] of Object.entries(req.files))
         {
             value[0].path = "uploads/students/" + req.body.idNo + value[0].fieldname + "." + value[0].originalname.split('.')[1];
-            fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" + newpath, ()=>{});
+            fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" + value[0].path, ()=>{});
         }
         const student = new Student({
             name : req.body.name,
@@ -169,25 +177,32 @@ async function main(){
              res.redirect("/");
         }
     })
+
     app.post("/addUser",  async function(req, res){
 
         let name = req.body.name, username = req.body.username, pass = req.body.password;
 
         User.register({name: name, username: username, level: 1}, pass, (err, user) => {
             if (err)
-                res.redirect("/addUser");
+                console.log(err);
             else
-                res.redirect("/");
+                res.redirect("/addUser");
         });
     })
 
     app.get("/students", async function(req, res){
         if (req.isAuthenticated()){
             let students = await Student.find({} , {name : 1, idNo : 1, phoneNo : 1})
-            res.render("user/student", {Students : students, lvl: req.user.level});
+            res.render("user/student", {Students : students, lvl: req.user.level, cpt: capacity});
         } else {
             res.redirect("/login");
         }
+    })
+    app.post("/cpt", async function(req, res){
+        if (req.isAuthenticated() && req.user.level == 0){
+            capacity = req.body.cpt
+        }
+        res.redirect("/students");
     })
 
     app.get("/student-info_:idNO", async function(req, res){
@@ -196,15 +211,23 @@ async function main(){
             if (students == null)
                 res.redirect("/students");
             else
-                res.render("user/student-info", {student : students, lvl : req.user.level});
+                res.render("user/student-Info", {student : students, lvl : req.user.level});
         }
         else {
             res.redirect("/");
         }
     })
+                    // delete student //
     app.post("/student-info", async function(req, res) {
-        await Student.deleteOne({username: req.body.idNO}).then(resault => {
-            //fs.rename(__dirname + "/public/" + req.body.path, __dirname + "/public/deleted", () => {});
+        let student = await Student.findOne({idNo: req.body.idNo})
+        console.log(student);
+        await Student.deleteOne({idNo: req.body.idNo}).then(resault => {
+            fs.unlinkSync(__dirname + "/public/" + student.cert);
+            fs.unlinkSync(__dirname + "/public/" + student.Behavior);
+            fs.unlinkSync(__dirname + "/public/" + student.health);
+            fs.unlinkSync(__dirname + "/public/" + student.birth);
+            fs.unlinkSync(__dirname + "/public/" + student.resdient);
+            fs.unlinkSync(__dirname + "/public/" + student.selfie);
         });
         res.redirect("/students");
     })
@@ -237,9 +260,7 @@ async function main(){
         }
     })
     app.post("/users", async function(req, res) {
-        let a = await User.deleteOne({username: req.body.username}).then(resault => {
-            //fs.rename(__dirname + "/public/" + req.body.path, __dirname + "/public/deleted", () => {});
-        });
+        let a = await User.deleteOne({username: req.body.username});
         res.redirect("/users");
     })
 
@@ -297,6 +318,9 @@ async function main(){
         workshop.save()
         res.redirect("/workShop")
     });
+    app.get("*", (req, res) => {
+        res.redirect("/");
+    })
 
 
     app.listen(process.env.PORT || 3000 , function(){

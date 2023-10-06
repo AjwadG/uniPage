@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ورشات العمل</title>
 
     
     <%- include("partials/header"); -%>
@@ -31,22 +31,6 @@
                     <div class="workShop-style"></div>
                     <div class="workShop-list">  
                         <div class="workShop-row">
-                                                <div class="workShop-card">         
-                                                    <div class="workShop-card-inner">
-                                                        <img src="content/images/335891803_769574001485612_6141222720703445561_n.jpg" class="workShop-card-img">
-                                                        <div class="workShop-text">
-                                                            <div class="workShop-text-title"><a href=""> CNC  &  3D Printer;</a></div>
-                                                            <div class="workShop-text-info">
-                                                                <div class="workShop-text-info-info">بدأت:;14 مارس, 2023</div>
-                                                            </div>
-                                                            <div class="workShop-text-text"> وسيتم التنسيق فى دورة مكثفة بمحتويات
-                                                                الرسم 2D      Inkscape  
-                                                                الرسم 3D     Sketchup
-                                                               وتطبيق عملى للرسومات على الطابعات تلاتية الابعاد
-                                                               وتطبيق عملى للنقش والنحت على الابواب الحديدة باستخدام مكينة CNC .</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <% workShops.forEach(shop => { %>
                                                     <% if (shop.date >= now) { %>
                                                 <div class="workShop-card">         
@@ -56,7 +40,7 @@
                                                             <div class="workShop-text-title"><a href=""><%= shop.title %></a></div>
                                                             <div class="workShop-text-info">
                                                                 
-                                                                <div class="workShop-text-info-info">ستبدء : <%= shop.dates %> <% if(lvl != -1) { %>
+                                                                <div class="workShop-text-info-info">ستبداء : <%= shop.dates %> <% if(lvl != -1) { %>
                                                                     <a href="/edit-workShops<%= shop.title %>" class="btn btn-secondary">تعديل</a>
                                                                     <button class="sign-btn btn btn-danger">حذف</button>
                                                                         <div class="model">
@@ -69,7 +53,7 @@
                                                                             </div>
                                                                             <div style="display: flex; align-items: center; justify-content: center;">
                                                                                 <form action="/workShop" method="post">
-                                                                                    <input type="text" style="display: none;" name="title" value="<%= shop.title %>">
+                                                                                    <input type="text" style="display: none;" name="image" value="<%= shop.image %>">
                                                                                     <button class="btn btn-danger mb-3 " style="text-decoration: none;">حذف</button>
                                                                                 </form>
                                                                             </div>
@@ -82,19 +66,6 @@
                                                     </div>
                                                 </div>
                                                 <% }}); %>
-                                                <div class="workShop-card">         
-                                                    <div class="workShop-card-inner">
-                                                        <img src="content/images/scrache.jpg" class="workShop-card-img">
-                                                        <div class="workShop-text">
-                                                            <div class="workShop-text-title"><a href=""> نحو جيل تقنى</a></div>
-                                                            <div class="workShop-text-info">
-                                                                <div class="workShop-text-info-info"> بدأت:&nbsp;28 نوفمبر, 2023</div>
-                                                            </div>
-                                                            <div class="workShop-text-text"> ستركز الدورة على ترغيب الطلاب فى البرمجة من خلال برنامج SCRATCH.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                     </div>
                                                 </div>
                                                 
@@ -105,21 +76,8 @@
 <div class="workShowps-wraper">
     <div class="workShop-type" id="working-for-The">ورشات العمل المنتهية</div>
     <div class="workShop-style"></div>
-    <h3 >Full-time</h3>
     <div class="workShop-list">  
         <div class="workShop-row">
-                                <div class="workShop-card">         
-                                    <div class="workShop-card-inner">
-                                        <img src="content/images/teching methods.jpg" class="workShop-card-img">
-                                        <div class="workShop-text">
-                                            <div class="workShop-text-title"><a href="">طرق التدريس الحديته </a></div>
-                                            <div class="workShop-text-info">
-                                                <div class="workShop-text-info-info">إنتهت:&nbsp;21 مارس, 2023</div>
-                                            </div>
-                                            <div class="workShop-text-text">  موجهة لاعضاء هيئة التدريس والمعيدين والمتعاونين بالكلية مع مشاركة المعهد العالي للعلوم والتقنية زوارة وكلية الاداب زوارة فى ورشة العمل..</div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <% workShops.forEach(shop => { %>
                                     <% if (shop.date <= now) { %>
                                 <div class="workShop-card">         
@@ -155,34 +113,8 @@
                                     </div>
                                 </div>
                                 <% }}); %>
-                                <div class="workShop-card">         
-                                    <div class="workShop-card-inner">
-                                        <img src="content/images/communication skills.jpg" class="workShop-card-img">
-                                        <div class="workShop-text">
-                                            <div class="workShop-text-title"><a href=""> مهارات العرض والتواصل الفعال</a></div>
-                                            <div class="workShop-text-info">
-                                                <div class="workShop-text-info-info"> إنتهت:&nbsp;24 مايو, 2022</div>
-                                            </div>
-                                            <div class="workShop-text-text"> باشراف مكتب الجودة بكلية التقنية الهندسية زوارة وبدعم من ادارة الكلية. 
-                                                اقيمت ورشة عمل بعنوان "مهارات العرض والتواصل الفعال" .</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="workShop-card">         
-                                    <div class="workShop-card-inner">
-                                        <img src="content/images/Untitled-1.png" class="workShop-card-img">
-                                        <div class="workShop-text">
-                                            <div class="workShop-text-title"><a href=""> Tenure track position in&nbsp;Business</a></div>
-                                            <div class="workShop-text-info">
-                                                <div class="workShop-text-info-info"> Starts:;July 1, 2023</div>
-                                            </div>
-                                            <div class="workShop-text-text"> The University's School of Business invites applications for a tenure track position in Business to start July&nbsp;2023.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            
-                                
         </div>
+    </div>
     </div>
 </div>
 

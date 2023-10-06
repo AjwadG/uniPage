@@ -217,7 +217,7 @@ border-radius: 5px;
     linear-gradient(0deg, black 0%, rgba(0, 0, 0, 0) 100%),
     url(../content/images/main_back_froung.jpg);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size:contain;
 }
 .heroContainer {
     width: 85%;
@@ -1062,4 +1062,82 @@ p{
 a[onclick="return false;"]{
     color: #b7202e !important;
     font-size: larger;
+}
+
+
+footer{
+    padding-top: 50px;
+    border-radius: 2px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 40px 40px;
+    background: rgb(37, 37, 37);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+.conter{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+    color: #e6e4e4;
+}
+.sec{
+     margin-left: 20px;
+}
+.aboutus{
+    width: 30%;
+    text-align: center;
+}
+.aboutus a img{
+    height: 143px;
+}
+.impLinks{
+    position: relative;
+    width: 30%;
+}
+.impLinks h2{
+    padding-bottom: 20px;
+    color: #b7202e ;
+}
+
+.impLinks ul li a{
+    color: #e6e4e4;
+    margin-bottom: 20px;
+    display: inline-block;
+
+
+}
+.impLinks ul li a:hover{
+    transform:scale(1.05);
+    color: #b7202e ;
+}
+.contactus{
+    position: relative;
+    width: 30%;
+}
+.contactus h2{
+    padding-bottom: 20px;
+    color: #b7202e ;
+}
+.contlogos{
+    display: flex;
+    flex-direction: row-reverse;
+    align-content: stretch;
+    justify-content: center;
+}
+.contlogos li a{
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-right: 20px;
+    
+}
+.contlogos li a img{
+    width: 30px;
+    padding-top: 20px;
 }
