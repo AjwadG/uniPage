@@ -40,7 +40,7 @@ main().catch(err => console.log(err));
 
 async function main(){
 
-    var capacity = 4;
+
 
 
     await mongoose.connect("mongodb+srv://AjwadG:PIF9RnDFt82uuYJm@cluster0.0ge3uap.mongodb.net/uniDB");
@@ -80,6 +80,8 @@ async function main(){
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
 
+    var capacity = 10;
+
     app.get("/", function(req, res){ res.render("home", {}) });
 
     app.get("/about", function(req, res){ res.render("about", {}) });
@@ -105,7 +107,7 @@ async function main(){
     app.get("/about", function(req, res){ res.render("about", {}) });
 
     app.get("/signUp", async function(req, res){ 
-        res.render("forms/signup", {access : (await Student.count({}) < capacity)}); 
+        res.render("forms/signup", {access : (await Student.count({}) < capacity), msg: 0}); 
     })
 
     app.get("/workShop", async function(req, res){
@@ -118,7 +120,14 @@ async function main(){
     app.post("/workShop", async function(req, res){
         if (req.isAuthenticated() && req.user.level >= 0) {
             await WorkShop.deleteOne({image: req.body.image}).then(results => {
-                fs.unlinkSync(__dirname + "/public/" + req.body.image)
+                try
+                {
+                    fs.unlinkSync(__dirname + "/public/" + req.body.image)
+                }
+                catch
+                {
+                    console.log("nothing to delete");
+                }
             });
         }
         res.redirect("workShop")
@@ -130,25 +139,30 @@ async function main(){
                     { name: 'resdient', maxCount: 1 }, { name: 'selfie', maxCount: 1 }];
 
     app.post("/signUp", upload.fields(fields), async function(req, res) {
-        if (await Student.findOne({idNo : req.body.idNo}) == undefined) {res.redirect("/signUp");}
-        for (const [key, value] of Object.entries(req.files))
-        {
-            value[0].path = "uploads/students/" + req.body.idNo + value[0].fieldname + "." + value[0].originalname.split('.')[1];
-            fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" + value[0].path, ()=>{});
+        if (await Student.findOne({idNo : req.body.idNo}) != undefined) {
+            res.render("forms/signup", {access : (await Student.count({}) < capacity), msg: 1});
         }
-        const student = new Student({
-            name : req.body.name,
-            idNo : req.body.idNo,
-            phoneNo : req.body.phoneNo,
-            cert : req.files["cert"][0].path,
-            Behavior : req.files["Behavior"][0].path,
-            health : req.files["health"][0].path,
-            birth : req.files["birth"][0].path,
-            resdient : req.files["resdient"][0].path,
-            selfie : req.files["selfie"][0].path
-        })
-        student.save()
-        res.redirect("/students");
+        else
+        {
+            for (const [key, value] of Object.entries(req.files))
+            {
+                value[0].path = "uploads/students/" + req.body.idNo + value[0].fieldname + "." + value[0].originalname.split('.')[1];
+                fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" + value[0].path, ()=>{});
+            }
+            const student = new Student({
+                name : req.body.name,
+                idNo : req.body.idNo,
+                phoneNo : req.body.phoneNo,
+                cert : req.files["cert"][0].path,
+                Behavior : req.files["Behavior"][0].path,
+                health : req.files["health"][0].path,
+                birth : req.files["birth"][0].path,
+                resdient : req.files["resdient"][0].path,
+                selfie : req.files["selfie"][0].path
+            })
+            student.save()
+            res.redirect("/");
+        }
     })
 
     app.get("/login", async function(req, res){
@@ -164,7 +178,7 @@ async function main(){
     })
     app.post("/login", passport.authenticate('local', { successRedirect: '/login', failWithError: true }),
     function(err, req, res, next) {
-        res.render("forms/login", {msg: "Wrong userName or Password"});
+        res.render("forms/login", {msg: "Wrong User Name or Password"});
     });
 
     app.get("/addUser", function(req, res){
@@ -220,14 +234,55 @@ async function main(){
                     // delete student //
     app.post("/student-info", async function(req, res) {
         let student = await Student.findOne({idNo: req.body.idNo})
-        console.log(student);
         await Student.deleteOne({idNo: req.body.idNo}).then(resault => {
-            fs.unlinkSync(__dirname + "/public/" + student.cert);
-            fs.unlinkSync(__dirname + "/public/" + student.Behavior);
-            fs.unlinkSync(__dirname + "/public/" + student.health);
-            fs.unlinkSync(__dirname + "/public/" + student.birth);
-            fs.unlinkSync(__dirname + "/public/" + student.resdient);
-            fs.unlinkSync(__dirname + "/public/" + student.selfie);
+            try
+            {
+                fs.unlinkSync(__dirname + "/public/" + student.cert);
+            }
+            catch
+            {
+                console.log("nothing to delete");
+            }
+            try
+            {
+                fs.unlinkSync(__dirname + "/public/" + student.Behavior);
+            }
+            catch
+            {
+                console.log("nothing to delete");
+            }
+            try
+            {
+                fs.unlinkSync(__dirname + "/public/" + student.health);
+            }
+            catch
+            {
+                console.log("nothing to delete");
+            }
+            try
+            {
+                fs.unlinkSync(__dirname + "/public/" + student.birth);
+            }
+            catch
+            {
+                console.log("nothing to delete");
+            }
+            try
+            {
+                fs.unlinkSync(__dirname + "/public/" + student.resdient);
+            }
+            catch
+            {
+                console.log("nothing to delete");
+            }
+            try
+            {
+                fs.unlinkSync(__dirname + "/public/" + student.selfie);
+            }
+            catch
+            {
+                console.log("nothing to delete");
+            }
         });
         res.redirect("/students");
     })

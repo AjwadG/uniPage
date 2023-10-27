@@ -69,7 +69,7 @@ header {
 .navItems ul li:hover .sub-menu-office{
     display:block;
     position: absolute;
-    background: rgb(37, 37, 37);;
+    background: rgb(37, 37, 37);
     border-radius: 10px;
 }
 .navItems ul li:hover .sub-menu-office ul{
@@ -124,10 +124,11 @@ li:has(.sbox:checked) .nav-search{
    transition-duration: 0.4s;
    font-size: 1.2rem;
    cursor: pointer;
+   border: 1px solid #b7202e;
 }
 .sign-btns:hover{
     background-color: #ffffff00;
-    border: 2px solid #b7202e;
+    border: 1px solid #b7202e;
 }
 .model{
     position: fixed;
@@ -1063,8 +1064,6 @@ a[onclick="return false;"]{
     color: #b7202e !important;
     font-size: larger;
 }
-
-
 footer{
     padding-top: 50px;
     border-radius: 2px;

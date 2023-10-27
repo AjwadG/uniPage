@@ -16,7 +16,9 @@
   <img src="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png" width="150px" alt="asd">
   <form method="post" action="/login">
     <h1 class="h3 mb-3 mt-3 fw-normal">تسجيل الدخول</h1>
-
+     <% if (msg != null) {%>
+      <h4 style="color: rgb(210, 29, 29);"><%= msg %></h4>
+      <% }%>
     <div class="form-floating">
       <input type="text" name="username" class="form-control top"  placeholder="User Name" required autofocus>
       <label>User Name</label>
