@@ -1,6 +1,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <link rel="stylesheet" href="css\style.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="icon" type="image/x-icon"  href="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png">
 
 </head>
@@ -8,17 +8,21 @@
   
 <header dir="ltr">
     <div id="header">
-        <div style="display: flex; align-items: center;">
+        <div class="logo-cont">
         <a href="/"><img src="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png" class="logo"></a>
         <p class="college-name">كلية التقنية الهندسية زوارة</p>
 
-      </div>
+        </div>
 
       <div class="navItems" dir="rtl">
         <nav class="navStyle"></nav>
-        <ul>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+          <i class="fa fa-bars"></i>
+        </label>
+        <ul class="nav-list">
           <li><a href="/">الرئيسية </a>
-          <li><a href="/about">عن الكلية</a>
+          <li>عن الكلية
             <ul>
               <div class="sub-menu-office">
                 <ul class="block" style="width:200px;"> 
@@ -34,7 +38,7 @@
               </ul>
           </div></ul>
           </li>
-          <li style="position: relative;"><a href="">المكاتب والإدارات</a>
+          <li style="position: relative;">المكاتب والإدارات
             <ul>
                 <div class="sub-menu-office">
                   <ul class="block" style="width:220px;"> 
@@ -44,7 +48,7 @@
                 </ul>
             </div></ul></li>
               
-              <li><a href="">الأقسام</a>
+              <li>الأقسام
                 <ul>
                   <div class="sub-menu-office" dir="rtl">
                     <ul class="block" style="width:250px;"> 
@@ -82,10 +86,6 @@
                 </div>
               </div>
               <div class="overlay"></div>
-              <li><input type="text" placeholder="بحث" class="nav-search">
-                <span class="search"><input type="checkbox" class="sbox"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-              </svg></span></li>
           </ul>
           
         </ul>
