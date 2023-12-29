@@ -180,3 +180,100 @@
      pointer-events: none;
      z-index: 5;
  }
+#check{
+    display: none;
+}
+.checkbtn {
+    font-size: 30px;
+    color: white;
+    float: right;
+    line-height: 80px;
+    margin-right: 10px;
+    cursor: pointer;
+    display: none;
+}
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: calc(1.5rem * 1.5);
+    padding-left: calc(1.5rem * 1.5);
+    margin-right: auto;
+    margin-left: auto;
+}
+.logo-cont {
+    display: flex;
+     align-items: center;
+}
+.logo {
+    margin: auto 15px;
+    width: 50px;
+}
+.college-name{
+    letter-spacing: 0.01em;
+    word-spacing: 0.01em;
+    position: relative;
+    top: 6px;
+}
+@media screen and (max-width: 900px) {
+    #header {
+        padding-right: calc(1rem * 0.5);
+        padding-left: calc(0.75rem * 0.5);
+      }
+    .logo-cont { 
+        align-items: end;
+    }
+    .logo {
+        width: 45px;
+    }
+    #header {
+        width: 100%;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .college-name {
+        font-size: 13px;
+        width: 50%;
+    }
+    .navItems {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: #240303;
+        top: 75px;
+        left: -100%;
+        text-align: center;
+        opacity: 0;
+        transition: all 0.5s;
+        z-index: 10;
+    }
+    .navItems  a{
+        color: white;
+        font-size: 30px;
+        font-weight: 600;
+        text-decoration: none;
+        display: block;
+        margin: 40px 0;
+        line-height: 30px;
+    }
+    .navItems .btn {
+      display: inline-block;
+      margin: 0 auto;
+      padding: 10px;
+    }
+    #check{
+        display: none;
+    }
+    #check:checked ~ .navItems{
+        opacity: 1;
+        left: 0;
+    }
+    body:has(#check:checked ~ .navItems){
+        height: 100vh;
+        overflow: hidden;
+    }
+    .checkbtn {
+        display: block;
+    }
+}
