@@ -82,7 +82,14 @@ async function main(){
 
     var capacity = 10;
 
-    app.get("/", function(req, res){ res.render("home", {}) });
+    app.get("/", async function(req, res){ 
+        let workShops = await WorkShop.find({})
+        if (workShops == undefined)
+            workShops = []
+        if (workShops.length > 3)
+            workShops = workShops.reverse().slice(0, 3);
+        res.render("home", {workShops: workShops, lvl: -1, now: Date.now()}) 
+    });
 
     app.get("/about", function(req, res){ res.render("about", {}) });
 
