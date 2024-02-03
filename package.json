@@ -12,8 +12,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
-    "path": "^0.12.7",
-    "yarn": "^1.22.19"
+    "path": "^0.12.7"
   },
   "name": "unipage",
   "description": "",
@@ -24,5 +23,12 @@
   },
   "author": "AjwadG <ajwadelgandouz@yahoo.com>",
   "license": "ISC",
-  "repository": "https://github.com/AjwadG/uniPage.git"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AjwadG/uniPage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AjwadG/uniPage/issues"
+  },
+  "homepage": "https://github.com/AjwadG/uniPage#readme"
 }
