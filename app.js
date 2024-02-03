@@ -99,6 +99,29 @@ async function main(){
 
     app.get("/communication", function(req, res){ res.render("departments/communication-department", {}) });
 
+    app.get("/department:name", function(req, res){
+        console.log(req.params.name)
+         res.render("departments/tmp", {name: req.params.name}) 
+        });
+
+    app.get("/genral_news", function(req, res){
+        res.render("news/genral", {}) 
+    });
+    app.get("/students_news", function(req, res){
+        res.render("news/students", {}) 
+    });
+    app.get("/employees_news", function(req, res){
+        res.render("news/employees", {}) 
+    });
+
+    app.get("/one", function(req, res){
+        res.render("news/one", {}) 
+    });
+
+    app.get("/teachers", function(req, res){
+        res.render("teachers", {}) 
+    });
+
     app.get("/computer", function(req, res){ res.render("departments/computer-department", {}) });
 
     app.get("/general", function(req, res){ res.render("departments/general-department", {}) });
