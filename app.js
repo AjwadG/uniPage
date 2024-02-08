@@ -1,10 +1,13 @@
+require('dotenv').config()
 const express = require("express");
 const _ = require("lodash");
 const bodyParser = require("body-parser");
 const multer = require('multer');
 const fs = require('fs');
+const mysql = require('mysql');
 const session = require('express-session');
 const passport = require("passport");
+const { error } = require('console');
 
 
 const app = express();
@@ -38,6 +41,17 @@ main().catch(err => console.log(err));
 
 async function main(){
 
+    const sqldb = mysql.createConnection({
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        database: process.env.MYSQL_DATABASE,
+        password: process.env.MYSQL_PASSWORD
+    });
+    sqldb.connect( (error) => {
+        if (error) {
+            console.log(error);
+        }
+    })
 
  /*    const workShopScema = new mongoose.Schema({
         image : String,
