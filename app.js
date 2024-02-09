@@ -2,11 +2,15 @@ require('dotenv').config()
 const express = require("express");
 const _ = require("lodash");
 const bodyParser = require("body-parser");
+
 const multer = require('multer');
 const fs = require('fs');
+
 const mysql = require('mysql');
+
 const session = require('express-session');
 const passport = require("passport");
+const LocalStrategy = require('passport-local').Strategy
 const { error } = require('console');
 
 
@@ -16,14 +20,18 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+
+
 app.use(session({
-    secret: "cetz secret.",
+    secret: process.env.SESSION_SECREAT,
     resave: false,
     saveUninitialized: false
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -47,8 +55,37 @@ async function main(){
         database: process.env.MYSQL_DATABASE,
         password: process.env.MYSQL_PASSWORD
     });
+
+
+    authUser = async (username, password, done) => {
+
+        user = await get_user(username, password);
+        
+        if (user == undefined)
+            done (null, false);
+        else {
+            let authenticated_user = { id: user.id, name: user.name, level: user.level} 
+            return done (null, authenticated_user ) 
+        }
+    }
+
+    passport.use(new LocalStrategy (authUser))
+
+
+    passport.serializeUser( (user, done) => { 
+
+        done(null, user.id)
     
-     function get_workshops() {
+    } )
+
+    passport.deserializeUser(async (id, done) => {
+
+        done (null, await get_user_id(id)); 
+    }) 
+
+
+    
+    function get_workshops() {
           return new Promise((resolve, reject) => {
             sql.query( "SELECT * FROM workshops;", (err, result) => {
                 return err ? reject(err) : resolve(result);
@@ -91,14 +128,27 @@ async function main(){
           })
     }
 
+    function get_user(username, password) {
+        return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM users WHERE username = ? AND password = ?;", [username, password],(err, result) => {
+                return err ? reject(err) : resolve(result[0]);
+              }
+            );
+          })
+    }
+
+    function get_user_id(id) {
+        return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM users WHERE id;", [id],(err, result) => {
+                return err ? reject(err) : resolve(result[0]);
+              }
+            );
+          })
+    }
 
 
 
-    /*
-    passport.use(User.createStrategy());
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
-    */
+
 
     var capacity = 10;
 
@@ -108,7 +158,9 @@ async function main(){
             workShops = []
         if (workShops.length > 3)
             workShops = workShops.reverse().slice(0, 3);
-        res.render("home", {workShops: workShops, lvl: -1, now: Date.now()}) 
+        let a = -1;
+            if (req.isAuthenticated()) {a = 1;};
+        res.render("home", {workShops: workShops, lvl: a, now: Date.now()}) 
     });
 
     app.get("/about", function(req, res){ res.render("about", {}) });
@@ -161,7 +213,7 @@ async function main(){
 
     app.get("/workShop", async function(req, res){
         let a = -1;
-/*         if (req.isAuthenticated()) {a = 1;}; */
+            if (req.isAuthenticated()) {a = 1;};
         let workShops = await get_workshops();
         res.render("Shop", {workShops: workShops, lvl: a, now: Date.now()})
     });
@@ -214,9 +266,9 @@ async function main(){
         })
 
     app.get("/login", async function(req, res){
-        if (false)
+        if (req.isAuthenticated())
         {
-            if (1 == 0)
+            if (req.user.level == 0)
                 res.redirect("/users");
             else
                 res.redirect("/students");
@@ -224,23 +276,17 @@ async function main(){
              res.render("forms/login", {msg : null});
         }
     })
-    app.post("/login", function(req, res){
-        res.redirect("/users") 
-    });
-/*         passport.authenticate('local', { successRedirect: '/login', failWithError: true }),
+    app.post("/login", passport.authenticate('local', { successRedirect: '/login', failWithError: true }),
     function(err, req, res, next) {
         res.render("forms/login", {msg: "Wrong User Name or Password"});
-    }); */
+    });
+
 
     app.get("/addUser", function(req, res){
-        if (false /* req.isAuthenticated() */)
-        {
-            if (1 == 0) {
+        if (req.isAuthenticated() && req.user.level == 0)
                 res.render("forms/addUser", {});
-            } 
-        } else {
-             res.redirect("forms/addUser");
-        }
+        else
+            res.redirect("/");
     })
 
     app.post("/addUser",  async function(req, res){
@@ -256,31 +302,30 @@ async function main(){
     })
 
     app.get("/students", async function(req, res){
-        if (true){
+        if (req.isAuthenticated()){
             let students = await get_students()
-            res.render("user/student", {Students : students, lvl: 1, cpt: capacity});
+            res.render("user/student", {Students : students, lvl: req.user.level, cpt: capacity});
         } else {
             res.redirect("/login");
         }
     })
     app.post("/cpt", async function(req, res){
-        if (false && 1 == 0){
+        if (req.isAuthenticated() && req.user.level == 0){
             capacity = req.body.cpt
         }
         res.redirect("/students");
     })
 
     app.get("/student-info_:idNO", async function(req, res){
-        if (true) {
+        if (req.isAuthenticated()) {
             let students = await get_student(req.params.idNO);
             if (students == undefined)
                 res.redirect("/students");
             else
-                res.render("user/student-Info", {student : students, lvl : 1});
+                res.render("user/student-Info", {student : students, lvl : req.user.level});
         }
         else {
-            res.redirect("/students");
-            /* res.redirect("/"); */
+            res.redirect("/");
         }
     })
                     // delete student //
@@ -340,7 +385,7 @@ async function main(){
     })
     
     app.get("/edit-student:idNo", async function(req, res) {
-        if (true) {
+        if (req.isAuthenticated()) {
             let student = get_student(req.params.idNo);
             if (student != undefined)
             {
@@ -351,11 +396,14 @@ async function main(){
         res.redirect("/");
     })
     app.post("/edit-student", async function(req, res){
+        if (req.isAuthenticated()) {
+            console.log("edit student");
+        } 
         res.redirect("/student-info_" + req.body.idNo);
     })
 
     app.get("/users", async function(req, res){
-        if (true) {
+        if (req.isAuthenticated() && req.user.level == 0) {
                 let users = await get_users();
                 res.render("user/users", {Users : users});
         } else {
@@ -368,14 +416,14 @@ async function main(){
     })
 
     app.get("/workShops", function(req, res){
-        if (true) 
+        if (req.isAuthenticated()) 
             res.render("forms/workShops", {});
         else
             res.redirect("/");
     })
 
     app.get("/edit-workShops:title", async function(req, res){
-        if (true) {
+        if (req.isAuthenticated()) {
             let workShop = await get_workshop(req.params.title);
             if (workShop != undefined)
             {
@@ -400,10 +448,10 @@ async function main(){
     })
 
     app.get("/logout", function(req, res){
-        /* req.logout(function(err) {
+         req.logout(function(err) {
             if (err) { console.log(err); } else {
                 res.redirect('/');
-            }}); */
+            }});
         res.redirect('/');
     })
     
