@@ -11,7 +11,7 @@ const mysql = require('mysql');
 const session = require('express-session');
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy
-const { error } = require('console');
+const { error, log } = require('console');
 
 
 const app = express();
@@ -58,9 +58,7 @@ async function main(){
 
 
     authUser = async (username, password, done) => {
-
         user = await get_user(username, password);
-        
         if (user == undefined)
             done (null, false);
         else {
@@ -72,16 +70,9 @@ async function main(){
     passport.use(new LocalStrategy (authUser))
 
 
-    passport.serializeUser( (user, done) => { 
+    passport.serializeUser( (user, done) => {done(null, user.id)})
 
-        done(null, user.id)
-    
-    } )
-
-    passport.deserializeUser(async (id, done) => {
-
-        done (null, await get_user_id(id)); 
-    }) 
+    passport.deserializeUser(async (id, done) => {done (null, await get_user_id(id)); }) 
 
 
     
@@ -101,6 +92,32 @@ async function main(){
             );
           })
     }
+    function delete_workshop(image) {
+        return new Promise((resolve, reject) => {
+            sql.query( "DELETE FROM `workshops` WHERE image = ?;", [image], (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
+
+    function add_workshop(values) {
+        return new Promise((resolve, reject) => {
+            sql.query( "INSERT INTO `workshops`(`image`, `title`, `date`, `dates`, `body`, `duration`, `place`) VALUES (?, ?, ?, ?, ?, ?, ?);", values, (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
+
+    function edit_workshop(values) {
+        return new Promise((resolve, reject) => {
+            sql.query( "UPDATE `workshops` SET `title`= ? ,`date`= ? , `dates`= ? , `body`= ? , `image`= ? WHERE title = ?;", values, (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
 
     function get_students() {
         return new Promise((resolve, reject) => {
@@ -110,10 +127,38 @@ async function main(){
             );
           })
     }
+
     function get_student(idNO) {
         return new Promise((resolve, reject) => {
             sql.query( "SELECT * FROM students WHERE idNo = ?;", [idNO],(err, result) => {
                 return err ? reject(err) : resolve(result[0]);
+              }
+            );
+          })
+    }
+
+    function delete_student(idNO) {
+        return new Promise((resolve, reject) => {
+            sql.query( "DELETE FROM `students` WHERE idNo = ?;", [idNO], (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
+
+    function add_student(values) {
+        return new Promise((resolve, reject) => {
+            sql.query( "INSERT INTO `students`(`name`, `idNo`, `phoneNo`, `cert`, `Behavior`, `health`, `birth`, `resdient`, `selfie`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            values, (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
+    function edit_student(values) {
+        return new Promise((resolve, reject) => {
+            sql.query( "UPDATE `students` SET `name`= ? ,`phoneNo`= ? WHERE idNo = ?", values, (err, result) => {
+                return err ? reject(err) : resolve(result);
               }
             );
           })
@@ -137,10 +182,28 @@ async function main(){
           })
     }
 
+    function add_user(user) {
+        return new Promise((resolve, reject) => {
+            sql.query( "INSERT INTO `users`(`name`, `username`, `password`, `level`) VALUES (?, ?, ?, ?)", user, (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
+
     function get_user_id(id) {
         return new Promise((resolve, reject) => {
             sql.query( "SELECT * FROM users WHERE id;", [id],(err, result) => {
                 return err ? reject(err) : resolve(result[0]);
+              }
+            );
+          })
+    }
+
+    function delete_user(username) {
+        return new Promise((resolve, reject) => {
+            sql.query( "DELETE FROM `users` WHERE username = ?;", [username], (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
               }
             );
           })
@@ -219,18 +282,20 @@ async function main(){
     });
                         // delete button //
     app.post("/workShop", async function(req, res){
-/*         if (req.isAuthenticated() && 1 >= 0) {
-            await WorkShop.deleteOne({image: req.body.image}).then(results => {
+         if (req.isAuthenticated() && 1 >= 0) {
+            if (await delete_workshop(req.body.image)  != 0) {
                 try
                 {
-                    fs.unlinkSync(__dirname + "/public/" + req.body.image)
+                        fs.unlinkSync(__dirname + "/public/" + req.body.image)
                 }
                 catch
                 {
-                    console.log("nothing to delete");
+                    console.log("nothing to delete catch");
                 }
-            });
-        } */
+            } else {
+                console.log("nothing to delete else");
+            }
+        }
         res.redirect("workShop")
     });
 
@@ -240,8 +305,10 @@ async function main(){
                     { name: 'resdient', maxCount: 1 }, { name: 'selfie', maxCount: 1 }];
 
     app.post("/signUp", upload.fields(fields), async function(req, res) {
-/*         if (await Student.findOne({idNo : req.body.idNo}) != undefined) {
-            res.render("forms/signup", {access : (await Student.count({}) < capacity), msg: 1});
+        state = await get_student(req.body.idNo)
+         if (state != undefined) {
+            let students = await get_students()
+            res.render("forms/signup", {access : (students.length < capacity), msg: 1});
         }
         else
         {
@@ -250,20 +317,21 @@ async function main(){
                 value[0].path = "uploads/students/" + req.body.idNo + value[0].fieldname + "." + value[0].originalname.split('.')[1];
                 fs.rename(__dirname + "/public/uploads/" + value[0].filename, __dirname + "/public/" + value[0].path, ()=>{});
             }
-            const student = new Student({
-                name : req.body.name,
-                idNo : req.body.idNo,
-                phoneNo : req.body.phoneNo,
-                cert : req.files["cert"][0].path,
-                Behavior : req.files["Behavior"][0].path,
-                health : req.files["health"][0].path,
-                birth : req.files["birth"][0].path,
-                resdient : req.files["resdient"][0].path,
-                selfie : req.files["selfie"][0].path
-            })
-            student.save() */
+
+            const student = [
+                req.body.name,
+                req.body.idNo,
+                req.body.phoneNo,
+                req.files["cert"][0].path,
+                req.files["Behavior"][0].path,
+                req.files["health"][0].path,
+                req.files["birth"][0].path,
+                req.files["resdient"][0].path,
+                req.files["selfie"][0].path
+            ]
+            await add_student(student).catch(error => console.log(error))
             res.redirect("/");
-        })
+        }})
 
     app.get("/login", async function(req, res){
         if (req.isAuthenticated())
@@ -290,15 +358,13 @@ async function main(){
     })
 
     app.post("/addUser",  async function(req, res){
+        if (req.isAuthenticated() && req.user.level == 0)
+        {
+            let user = [req.body.name, req.body.username, req.body.password, 1]
+            await add_user(user).catch(err => console.log(err))
+        }
+        res.redirect("/users");
 
-        let name = req.body.name, username = req.body.username, pass = req.body.password;
-        res.redirect("/addUser");
-        /* User.register({name: name, username: username, level: 1}, pass, (err, user) => {
-            if (err)
-                console.log(err);
-            else
-                res.redirect("/addUser");
-        }); */
     })
 
     app.get("/students", async function(req, res){
@@ -330,8 +396,8 @@ async function main(){
     })
                     // delete student //
     app.post("/student-info", async function(req, res) {
-        /* let student = await Student.findOne({idNo: req.body.idNo})
-        await Student.deleteOne({idNo: req.body.idNo}).then(resault => {
+        const student = await get_student(req.body.idNO);
+        await delete_student(req.body.idNo).then(resault => {
             try
             {
                 fs.unlinkSync(__dirname + "/public/" + student.cert);
@@ -380,7 +446,7 @@ async function main(){
             {
                 console.log("nothing to delete");
             }
-        }); */
+        }).catch(err => console.log(err));
         res.redirect("/students");
     })
     
@@ -397,7 +463,7 @@ async function main(){
     })
     app.post("/edit-student", async function(req, res){
         if (req.isAuthenticated()) {
-            console.log("edit student");
+            await edit_student([req.body.name, req.body.phoneNo, req.body.idNo]).catch(err => console.log(err))
         } 
         res.redirect("/student-info_" + req.body.idNo);
     })
@@ -411,7 +477,7 @@ async function main(){
         }
     })
     app.post("/users", async function(req, res) {
-        let a = [];
+        await delete_user(req.body.username).catch(err => console.log(err))
         res.redirect("/users");
     })
 
@@ -434,16 +500,15 @@ async function main(){
             res.redirect("/");
     })
     app.post("/edit-workShops", async function(req, res){
-        /* if (req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
             let path = req.body.path.split(req.body.old)[0] + req.body.title + "." + req.body.path.split(".")[1];
             
-            await WorkShop.findOneAndUpdate({title: req.body.old}, 
-                {title: req.body.title, date: req.body.date, dates: req.body.date, body: req.body.body, image: path})
+            await edit_workshop([req.body.title, req.body.date, req.body.date, req.body.body, path, req.body.old])
                 .then(resault => {
-                    if (resault != null)
+                    if (resault != 0)
                         fs.rename(__dirname + "/public/" + req.body.path, __dirname + "/public/" + path, () => {});
-                });
-        }  */
+                }).catch(err => console.log(err));
+        } 
         res.redirect("/workShop");
     })
 
@@ -455,19 +520,19 @@ async function main(){
         res.redirect('/');
     })
     
-    app.post("/workShops", upload.single('image'), function(req, res) {
+    app.post("/workShops", upload.single('image'), async function(req, res) {
         const path = "uploads/workshops/" + req.body.title + "." +req.file.originalname.split('.')[1];
-        /*fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/" + path, ()=>{});
-         const workshop = new WorkShop({
-            image : path,
-            title : req.body.title,
-            date : req.body.date,
-            dates : req.body.date,
-            body : req.body.body,
-            duration : req.body.duration,
-            place: req.body.place
-        })
-        workshop.save() */
+        fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/" + path, ()=>{});
+         const workshop = [
+            path,
+            req.body.title,
+            req.body.date,
+            req.body.date,
+            req.body.body,
+            req.body.duration,
+            req.body.place
+        ]
+        await add_workshop(workshop).catch(err => console.log(err))
         res.redirect("/workShop")
     });
     app.get("*", (req, res) => {
