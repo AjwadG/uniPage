@@ -41,57 +41,69 @@ main().catch(err => console.log(err));
 
 async function main(){
 
-    const sqldb = mysql.createConnection({
+    const sql = mysql.createConnection({
         host: process.env.MYSQL_HOST,
         user: process.env.MYSQL_USER,
         database: process.env.MYSQL_DATABASE,
         password: process.env.MYSQL_PASSWORD
     });
-    sqldb.connect( (error) => {
-        if (error) {
-            console.log(error);
-        }
-    })
-
- /*    const workShopScema = new mongoose.Schema({
-        image : String,
-        title : String,
-        date : Date,
-        dates : String,
-        body : String
-    })
-    const userScema = new mongoose.Schema({
-        name : String,
-        username : String,
-        password : String,
-        level : Number
-    })
-    userScema.plugin(passportLocalMongoose);
-    const studentScema = new mongoose.Schema({
-        name : String,
-        idNo : String,
-        phoneNo : Number,
-        cert : String,
-        Behavior : String,
-        health : String,
-        birth : String,
-        resdient : String,
-        selfie : String
-    })
     
+     function get_workshops() {
+          return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM workshops;", (err, result) => {
+                return err ? reject(err) : resolve(result);
+              }
+            );
+          })
+    }
+    function get_workshop(title) {
+        return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM workshops WHERE title = ?;", [title], (err, result) => {
+                return err ? reject(err) : resolve(result[0]);
+              }
+            );
+          })
+    }
 
-    const WorkShop = new mongoose.model("WorkShop" , workShopScema);
-    const User = new mongoose.model("User" , userScema);
-    const Student = new mongoose.model("Student" , studentScema);
+    function get_students() {
+        return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM students;", (err, result) => {
+                return err ? reject(err) : resolve(result);
+              }
+            );
+          })
+    }
+    function get_student(idNO) {
+        return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM students WHERE idNo = ?;", [idNO],(err, result) => {
+                return err ? reject(err) : resolve(result[0]);
+              }
+            );
+          })
+    }
 
+    function get_users() {
+        return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM users;", (err, result) => {
+                return err ? reject(err) : resolve(result);
+              }
+            );
+          })
+    }
+
+
+
+
+    /*
     passport.use(User.createStrategy());
     passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser()); */
+    passport.deserializeUser(User.deserializeUser());
+    */
 
     var capacity = 10;
 
     app.get("/", async function(req, res){ 
-        let workShops = []
+        let workShops = await get_workshops();
         if (workShops == undefined)
             workShops = []
         if (workShops.length > 3)
@@ -150,7 +162,7 @@ async function main(){
     app.get("/workShop", async function(req, res){
         let a = -1;
 /*         if (req.isAuthenticated()) {a = 1;}; */
-        let workShops = []
+        let workShops = await get_workshops();
         res.render("Shop", {workShops: workShops, lvl: a, now: Date.now()})
     });
                         // delete button //
@@ -245,8 +257,8 @@ async function main(){
 
     app.get("/students", async function(req, res){
         if (true){
-            let students = []
-            res.render("user/student", {Students : [students], lvl: 1, cpt: capacity});
+            let students = await get_students()
+            res.render("user/student", {Students : students, lvl: 1, cpt: capacity});
         } else {
             res.redirect("/login");
         }
@@ -259,9 +271,9 @@ async function main(){
     })
 
     app.get("/student-info_:idNO", async function(req, res){
-        if (false) {
-            let students = [];
-            if (students == null)
+        if (true) {
+            let students = await get_student(req.params.idNO);
+            if (students == undefined)
                 res.redirect("/students");
             else
                 res.render("user/student-Info", {student : students, lvl : 1});
@@ -328,8 +340,8 @@ async function main(){
     })
     
     app.get("/edit-student:idNo", async function(req, res) {
-        if (false) {
-            let student = [];
+        if (true) {
+            let student = get_student(req.params.idNo);
             if (student != undefined)
             {
                 res.render("forms/edit-student", {student: student}); 
@@ -343,12 +355,11 @@ async function main(){
     })
 
     app.get("/users", async function(req, res){
-        if (false && 1 == 0) {
-                let users = []
+        if (true) {
+                let users = await get_users();
                 res.render("user/users", {Users : users});
         } else {
-            let users = []
-            res.render("user/users", {Users : users});
+            res.redirect("/");
         }
     })
     app.post("/users", async function(req, res) {
@@ -364,8 +375,8 @@ async function main(){
     })
 
     app.get("/edit-workShops:title", async function(req, res){
-        if (false) {
-            let workShop = []
+        if (true) {
+            let workShop = await get_workshop(req.params.title);
             if (workShop != undefined)
             {
                 res.render("forms/edit-workShop", {workShop: workShop}); 
@@ -398,8 +409,8 @@ async function main(){
     
     app.post("/workShops", upload.single('image'), function(req, res) {
         const path = "uploads/workshops/" + req.body.title + "." +req.file.originalname.split('.')[1];
-        fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/" + path, ()=>{});
-/*         const workshop = new WorkShop({
+        /*fs.rename(__dirname + "/public/uploads/" + req.file.filename, __dirname + "/public/" + path, ()=>{});
+         const workshop = new WorkShop({
             image : path,
             title : req.body.title,
             date : req.body.date,
