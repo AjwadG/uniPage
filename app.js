@@ -535,12 +535,33 @@ async function main(){
         await add_workshop(workshop).catch(err => console.log(err))
         res.redirect("/workShop")
     });
+
+    app.get("/feadBack", async function(req, res){
+        res.render("feadBack/main", {});
+    })
+    app.post("/feadBack", async function(req, res){
+        res.render("feadBack/good", {});
+    })
+    app.post("/good", async function(req, res){
+        res.render("feadBack/bad", {});
+    })
+    app.post("/bad", async function(req, res){
+        res.render("feadBack/improve", {});
+    })
+    app.post("/improve", async function(req, res){
+        res.render("feadBack/weak", {});
+    })
+    app.post("/weak", async function(req, res){
+        res.render("feadBack/done", {});
+    })
+
+
     app.get("*", (req, res) => {
         res.redirect("/");
     })
 
-
-    app.listen(process.env.PORT || 3000 , function(){
-        console.log("server started at port 3000 or " + process.env.PORT);
+    const PORT = process.env.PORT || 3000 ;
+    app.listen(PORT , function(){
+        console.log("server started at port " + PORT);
     })
 }
