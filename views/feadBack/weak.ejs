@@ -17,6 +17,10 @@
   <img src="content/images/345832210_1468513350593187_453318926271352151_n-removebg.png" width="150px" alt="asd">
   <form method="post" action="/weak" dir="rtl">
     <h1 class="h3 mb-4 mt-3 fw-bold">تقصير من استاذ محدد</h1>
+
+    <input type="text" name="year" value="<%= year %>" style="display: none;">
+    <input type="text" name="dept" value="<%= dept %>" style="display: none;">
+
     <div class="mt-3" id="num_1">
         <div class="form-floating" >
           <input type="text" name="name[]" class="form-control top" required autofocus>
@@ -32,11 +36,11 @@
             <label class="input-group-text" style="height: 100%;" for="type">نوع التقصير </label>
           </div>
         <select class="custom-select form-control mid" id="type" name="type[]" required>
-          <option value="1">عدم التزام بالحضور </option>
-          <option value="2">عدم كفاءة  </option>
-          <option value="3">كفاءة الاستاذ في مادة اخرى   </option>
-          <option value="4">مشكلة في التواصل </option>
-          <option value="5">غيرها</option>
+          <option value="عدم التزام بالحضور">عدم التزام بالحضور </option>
+          <option value="عدم كفاءة">عدم كفاءة</option>
+          <option value="كفاءة الاستاذ في مادة اخرى">كفاءة الاستاذ في مادة اخرى</option>
+          <option value="مشكلة في التواصل">مشكلة في التواصل </option>
+          <option value="غيرها">غيرها</option>
         </select>
         </div>
         

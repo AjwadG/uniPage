@@ -539,19 +539,87 @@ async function main(){
     app.get("/feadBack", async function(req, res){
         res.render("feadBack/main", {});
     })
+
     app.post("/feadBack", async function(req, res){
-        res.render("feadBack/good", {});
+        const dept = req.body.dept;
+        const year = req.body.year;
+        res.render("feadBack/good", {dept: dept, year: year});
     })
+
+    function add_good(body, i) {
+        return new Promise((resolve, reject) => {
+            sql.query( "INSERT INTO `good`(`dept`, `year`, `name`, `tech`, `percent`, `notes`) VALUES (?, ?, ?, ?, ?, ?)", 
+            [body.dept, body.year, body.name[i], body.tech[i], body.percent[i], body.notes[i]], (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
     app.post("/good", async function(req, res){
-        res.render("feadBack/bad", {});
+        const dept = req.body.dept;
+        const year = req.body.year;
+
+        for (let i = 0; i < req.body.name.length; i++) {
+            await add_good(req.body, i).catch(err => console.log(err));
+        }
+        res.render("feadBack/bad", {dept: dept, year: year});
     })
+
+    function add_bad(body, i) {
+        return new Promise((resolve, reject) => {
+            sql.query( "INSERT INTO `bad`(`dept`, `year`, `name`, `tech`, `percent`, `number`, `notes`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            [body.dept, body.year, body.name[i], body.tech[i], body.percent[i], body.number[i], body.notes[i]], (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
     app.post("/bad", async function(req, res){
-        res.render("feadBack/improve", {});
+        const dept = req.body.dept;
+        const year = req.body.year;
+
+        for (let i = 0; i < req.body.name.length; i++) {
+            await add_bad(req.body, i).catch(err => console.log(err));
+        }
+        res.render("feadBack/improve", {dept: dept, year: year});
     })
+
+    function add_improve(body, i) {
+        return new Promise((resolve, reject) => {
+            sql.query( "INSERT INTO `improve`(`dept`, `year`, `name`, `type`, `why`, `notes`) VALUES (?, ?, ?, ?, ?, ?)", 
+            [body.dept, body.year, body.name[i], body.type[i], body.why[i], body.notes[i]], (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
     app.post("/improve", async function(req, res){
-        res.render("feadBack/weak", {});
+        const dept = req.body.dept;
+        const year = req.body.year;
+
+        for (let i = 0; i < req.body.name.length; i++) {
+            await add_improve(req.body, i).catch(err => console.log(err));
+        }
+        res.render("feadBack/weak", {dept: dept, year: year});
     })
+
+    function add_weak(body, i) {
+        return new Promise((resolve, reject) => {
+            sql.query( "INSERT INTO `weak`(`dept`, `year`, `name`, `tech`, `type`, `notes`) VALUES (?, ?, ?, ?, ?, ?)", 
+            [body.dept, body.year, body.name[i], body.tech[i], body.type[i], body.notes[i]], (err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
     app.post("/weak", async function(req, res){
+        for (let i = 0; i < req.body.name.length; i++) {
+            await add_weak(req.body, i).catch(err => console.log(err));
+        }
+        res.redirect("/done");
+    })
+
+    app.get("/done", function(req, res){
         res.render("feadBack/done", {});
     })
 
