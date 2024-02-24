@@ -619,6 +619,50 @@ async function main(){
         res.redirect("/done");
     })
 
+    function get_from(table) {
+        return new Promise((resolve, reject) => {
+            sql.query( "SELECT * FROM " + table + ";", (err, result) => {
+                return err ? reject(err) : resolve(result);
+              }
+            );
+          })
+    }
+
+    app.get("/review", async function(req, res){
+        if (!req.isAuthenticated()) {
+            return res.redirect("/");
+        } 
+        
+        const tables = ["weak", "improve", "bad", "good"]
+        for (let i = 0; i < tables.length; i++) {
+            const a = tables[i];
+            tables[i] = await get_from(tables[i]).catch(err => console.log(err));
+            tables[i] = [a, [...tables[i]]]
+        }
+        res.render("user/review", {tables: tables});
+    })
+
+    function delete_from(table, id) {
+        return new Promise((resolve, reject) => {
+            sql.query( "DELETE FROM " + table + " WHERE id = ?;", [id],(err, result) => {
+                return err ? reject(err) : resolve(result.affectedRows);
+              }
+            );
+          })
+    }
+
+    app.post("/review", async function(req, res){
+        if (!req.isAuthenticated()) {
+            return res.redirect("/");
+        } 
+        const tables = ["weak", "improve", "bad", "good"]
+        const { table, id } = req.body
+        if (tables.includes(table)) {
+            await delete_from(table, id)
+        }
+        res.redirect("/review");
+    })
+
     app.get("/done", function(req, res){
         res.render("feadBack/done", {});
     })
